@@ -1,25 +1,25 @@
 #pragma once
 #include "Sensor.h"
 #include <iostream>
-enum SensorType { AirqualitySensor = 1, TemperatureSensor, HumiditySensor };
+enum class SensorType { AirqualitySensor = 'A', TemperatureSensor = 'T', HumiditySensor = 'H'};
 class AirqualitySensor : public Sensor
 {
 private:
-	string UnitOfMeasurment = "%";
+	std::string UnitOfMeasurment = "%";
 public:
-	AirqualitySensor(double MinSimulation, double MaxSimulation, string NewName);
+	AirqualitySensor(std::string NewName, double MinSimulation, double MaxSimulation);
 };
 class TemperatureSensor : public Sensor
 {
 private:
-	string UnitOfMeasurment = "C";
+	std::string UnitOfMeasurment = "C";
 public:
-	TemperatureSensor(double MinSimulation, double MaxSimulation, string NewName);
+	TemperatureSensor(std::string NewName, double MinSimulation, double MaxSimulation);
 };
 class HumiditySensor : public Sensor
 {
 private:
-	string UnitOfMeasurment = "AH";
+	std::string UnitOfMeasurment = "AH";
 public:
-	HumiditySensor(double MinSimulation, double MaxSimulation, string NewName);
+	HumiditySensor(std::string NewName, double MinSimulation, double MaxSimulation);
 };

@@ -1,7 +1,7 @@
 #include "Storage.h"
-#include "AirqualitySensor.h"
-#include "TemperatureSensor.h"
 #include "Utility.h"
+#include "Sensor.h"
+#include "SensorType.h"
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -9,21 +9,11 @@ int main()
 {
 	Utility Utility;
 	Storage MainStorage;
-	AirqualitySensor MainAirqiality;
-	TemperatureSensor MainTemperature;
 	MainStorage.ReadFile();
 	bool MainLoopActive = true;
 	while (MainLoopActive == true)
 	{
-		system("CLS");
-		cout << "---------------------------------" << endl;
-		cout << "[1] Adding sensor readings" << endl;
-		cout << "[2] Read out readings" << endl;
-		cout << "[3] Statistics of readings" << endl;
-		cout << "[4] Visual representation of data" << endl;
-		cout << "[5] Search for readings" << endl;
-		cout << "[6] Exit program" << endl;
-		cout << "---------------------------------" << endl;
+		Utility.PrintMenu();
 		string NumberChoice = "Choice between [1]-[6]";
 		int Choice = Utility.NumberChoice(NumberChoice);
 		switch (Choice)
@@ -34,71 +24,29 @@ int main()
 			bool SimulatorRunning = true;
 			while (SimulatorRunning == true)
 			{
-				cout << "Do you want to simulate sensor readings" << endl;
-				cout << "[T]emperature / [A]irquality / [B]oth" << endl;
-				cout << "If you dont want to simulate anything press [Q]" << endl;
+				Utility.Simulationmenu();
 				char Des;
 				cin >> Des;
 				//använder toupper så man kan skriva bådde stor eller liten bokstav
 				if ((char)toupper(Des) == 'T')
 				{
-					string TimeQuestion = "How many Temperature readings do you want to simulate?";
-					int Iterations = Utility.NumberChoice(TimeQuestion);
-					for (int i = 0; i < Iterations; i++)
-					{
-						string NewSensorName;
-						cin >> NewSensorName;
-						TemperatureSensor New_Temperature_Reading;
-						Measurement TemperatureReading;
-						TemperatureReading.GetReading(NewSensorName, New_Temperature_Reading.Read(), New_Temperature_Reading.GetUnitOfMeasurment(), Utility.TimeGenerator());
-						MainStorage.WriteFile(TemperatureReading.TimeStamp, TemperatureReading.UnitOfMeasurment, TemperatureReading.SensorName, TemperatureReading.Measurement);
-						MainStorage.GetMeasurementReading(TemperatureReading);
-					}
-					Utility.ENTER();
+					MainStorage.GetMeasurementReading(Des);
 					SimulatorRunning = false;
 				}
 				else if ((char)toupper(Des) == 'A')
 				{
-					string TimeQuestion = "How many Airquality readings do you want to simulate?";
-					int Iterations = Utility.NumberChoice(TimeQuestion);
-					for (int i = 0; i < Iterations; i++)
-					{
-						string NewSensorName;
-						cin >> NewSensorName;
-						AirqualitySensor New_Airquality_Reading;
-						Measurement AirqualityReading;
-						AirqualityReading.GetReading(NewSensorName, New_Airquality_Reading.Read(), New_Airquality_Reading.GetUnitOfMeasurment(), Utility.TimeGenerator());
-						MainStorage.WriteFile(AirqualityReading.TimeStamp, AirqualityReading.UnitOfMeasurment, AirqualityReading.SensorName, AirqualityReading.Measurement);
-						MainStorage.GetMeasurementReading(AirqualityReading);
-					}
-					Utility.ENTER();
+					MainStorage.GetMeasurementReading(Des);
+					SimulatorRunning = false;
+				}
+				else if ((char)toupper(Des) == 'H')
+				{
+					MainStorage.GetMeasurementReading(Des);
 					SimulatorRunning = false;
 				}
 				else if ((char)toupper(Des) == 'B')
 				{
-					string TimeQuestion = "How many readings do you want to simulate?";
-					int Iterations = Utility.NumberChoice(TimeQuestion);
-					for (int i = 0; i < Iterations; i++)
-					{
-						string NewSensorName;
-						cin >> NewSensorName;
-						TemperatureSensor New_Temperature_Reading;
-						Measurement TemperatureReading;
-						TemperatureReading.GetReading(NewSensorName, New_Temperature_Reading.Read(), New_Temperature_Reading.GetUnitOfMeasurment(), Utility.TimeGenerator());
-						MainStorage.WriteFile(TemperatureReading.TimeStamp, TemperatureReading.UnitOfMeasurment, TemperatureReading.SensorName, TemperatureReading.Measurement);
-						MainStorage.GetMeasurementReading(TemperatureReading);
-					}
-					for (int i = 0; i < Iterations; i++)
-					{
-						string NewSensorName;
-						cin >> NewSensorName;
-						AirqualitySensor New_Airquality_Reading;
-						Measurement AirqualityReading;
-						AirqualityReading.GetReading(NewSensorName, New_Airquality_Reading.Read(), New_Airquality_Reading.GetUnitOfMeasurment(), Utility.TimeGenerator());
-						MainStorage.WriteFile(AirqualityReading.TimeStamp, AirqualityReading.UnitOfMeasurment, AirqualityReading.SensorName, AirqualityReading.Measurement);
-						MainStorage.GetMeasurementReading(AirqualityReading);
-					}
-					Utility.ENTER();
+					MainStorage.GetMeasurementReading('T');
+					MainStorage.GetMeasurementReading('A');
 					SimulatorRunning = false;
 				}
 				else
@@ -106,6 +54,7 @@ int main()
 					cout << "Wrong input" << endl;
 				}
 			}
+			Utility.ENTER();
 		}
 		break;
 		case 2:
@@ -117,11 +66,7 @@ int main()
 				if (MainStorage.SizeOfAirquality() >= 1 || MainStorage.SizeOfTemperature() >= 1)
 				{
 
-					cout << "You have [" << MainStorage.SizeOfAirquality() << "]" << " Airquality readings" << endl;
-					cout << "You have [" << MainStorage.SizeOfTemperature() << "]" << " Temperature readings" << endl;
-					cout << "Do you want to print sensor readings" << endl;
-					cout << "[T]emperature / [A]irquality / [B]oth" << endl;
-					cout << "If you dont want to print anything press [Q]" << endl;
+					Utility.PrintReadingMenu();
 					char Des;
 					cin >> Des;
 					//använder toupper så man kan skriva bådde stor eller liten bokstav
@@ -207,12 +152,12 @@ int main()
 						if (MainStorage.SizeOfTemperature() >= 1)
 						{
 							double SumOfTemp = MainStorage.SumOfTemperature();
-							cout << "The sum of all Temperature readings is: " << SumOfTemp << MainTemperature.GetUnitOfMeasurment() << endl;
-							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << MainTemperature.GetUnitOfMeasurment() << endl;
+							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
+							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << "C" << endl;
 							void MinMaxTemperature();
 							double VarianceTemperature = MainStorage.TemperatureVariance(SumOfTemp);
-							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << MainTemperature.GetUnitOfMeasurment() << std::endl;
-							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << MainTemperature.GetUnitOfMeasurment() << std::endl;
+							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << "C" << std::endl;
+							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << "C" << std::endl;
 						}
 						else
 						{
@@ -224,12 +169,12 @@ int main()
 						if (MainStorage.SizeOfAirquality() >= 1)
 						{
 							double SumOfAirqual = MainStorage.SumOfAirquality();
-							cout << "The sum of all airquality readings is: " << SumOfAirqual << MainAirqiality.GetUnitOfMeasurment() << endl;
-							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfAirquality() << MainAirqiality.GetUnitOfMeasurment() << endl;
+							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
+							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
 							void MinMaxAirquality();
 							double VarianceAirqual = MainStorage.AirqualityVariance(SumOfAirqual);
-							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << MainAirqiality.GetUnitOfMeasurment() << endl;
-							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << MainAirqiality.GetUnitOfMeasurment() << endl;
+							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << "%" << endl;
+							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
 						}
 						else
 						{
@@ -241,41 +186,41 @@ int main()
 						if (MainStorage.SizeOfAirquality() >= 1 && MainStorage.SizeOfTemperature() >= 1)
 						{
 							double SumOfTemp = MainStorage.SumOfTemperature();
-							cout << "The sum of all Temperature readings is: " << SumOfTemp << MainTemperature.GetUnitOfMeasurment() << endl;
-							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << MainTemperature.GetUnitOfMeasurment() << endl;
+							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
+							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << "C" << endl;
 							void MinMaxTemperature();
 							double VarianceTemperature = MainStorage.TemperatureVariance(SumOfTemp);
-							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << MainTemperature.GetUnitOfMeasurment() << endl;
-							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << MainTemperature.GetUnitOfMeasurment() << endl;
+							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << "C" << endl;
+							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << "C" << endl;
 							double SumOfAirqual = MainStorage.SumOfAirquality();
-							cout << "The sum of all airquality readings is: " << SumOfAirqual << MainAirqiality.GetUnitOfMeasurment() << endl;
-							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfAirquality() << MainAirqiality.GetUnitOfMeasurment() << endl;
+							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
+							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
 							void MinMaxAirquality();
 							double VarianceAirqual = MainStorage.AirqualityVariance(SumOfAirqual);
-							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << MainAirqiality.GetUnitOfMeasurment() << endl;
-							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << MainAirqiality.GetUnitOfMeasurment() << endl;
+							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << "%" << endl;
+							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
 						}
 						else if (MainStorage.SizeOfAirquality() >= 1 && MainStorage.SizeOfTemperature() < 1)
 						{
 							cout << "You dont have any temperature readings" << endl;
 							double SumOfAirqual = MainStorage.SumOfAirquality();
-							cout << "The sum of all airquality readings is: " << SumOfAirqual << MainAirqiality.GetUnitOfMeasurment() << endl;
-							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfTemperature() << MainAirqiality.GetUnitOfMeasurment() << endl;
+							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
+							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfTemperature() << "%" << endl;
 							void MinMaxAirquality();
 							double VarianceAirqual = MainStorage.TemperatureVariance(SumOfAirqual);
-							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << MainAirqiality.GetUnitOfMeasurment() << endl;
-							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << MainAirqiality.GetUnitOfMeasurment() << endl;
+							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << "%" << endl;
+							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
 						}
 						else if (MainStorage.SizeOfAirquality() < 1 && MainStorage.SizeOfTemperature() >= 1)
 						{
 							cout << "You dont have any airquality readings" << endl;
 							double SumOfTemp = MainStorage.SumOfTemperature();
-							cout << "The sum of all Temperature readings is: " << SumOfTemp << MainTemperature.GetUnitOfMeasurment() << endl;
-							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << MainTemperature.GetUnitOfMeasurment() << endl;
+							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
+							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << "C" << endl;
 							void MinMaxTemperature();
 							double VarianceTemperature = MainStorage.TemperatureVariance(SumOfTemp);
-							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << MainTemperature.GetUnitOfMeasurment() << endl;
-							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << MainTemperature.GetUnitOfMeasurment() << endl;
+							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << "C" << endl;
+							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << "C" << endl;
 						}
 					}
 					else if ((char)toupper(Des) == 'Q')
@@ -443,7 +388,7 @@ int main()
 				else
 				{
 					cout << "You dont have any readings to search for" << endl;
-					SearchIsRunning == false;
+					SearchIsRunning = false;
 				}
 				Utility.ENTER();
 			}

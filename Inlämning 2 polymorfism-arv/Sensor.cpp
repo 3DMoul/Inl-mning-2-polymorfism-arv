@@ -1,14 +1,19 @@
 #include "Utility.h"
 #include "Sensor.h"
-double Sensor::Read(double MinSimulation, double MaxSimulation)
+#include <iostream>
+#include <string>
+
+Sensor::Sensor(std::string SensorName, double MinSimulation, double MaxSimulation)
+	: SensorName(SensorName), MinSimulation(MinSimulation), MaxSimulation(MaxSimulation) {};
+double Sensor::Read() const
 {
-	return RandomTempreture(MinSimulation, MaxSimulation);
+	return Utility::RandomTempreture(MinSimulation, MaxSimulation);
 }
 string Sensor::name() const
 {
-
+	return SensorName;
 }
 string Sensor::GetUnitOfMeasurment() const
 {
-
+	return UnitOfMeasurment;
 }

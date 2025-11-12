@@ -1,15 +1,16 @@
 #pragma once
 #include <iostream>
-using namespace std;
+#include <string>
 class Sensor
 {
 private:
-	string SensorName;
+	std::string SensorName;
 	double MinSimulation, MaxSimulation;
-	string UnitOfMeasurment;
+	std::string UnitOfMeasurment;
 public:
-	Sensor(string SensorName, double MinSimulation, double MaxSimulation);
-	double Read(double MinSimulation, double MaxSimulation);
-	string name() const;
-	string GetUnitOfMeasurment() const;
+	Sensor(std::string SensorName, double MinSimulation, double MaxSimulation);
+	virtual ~Sensor() = default;
+	double Read() const;
+	std::string name() const;
+	std::string GetUnitOfMeasurment() const;
 };

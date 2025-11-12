@@ -2,14 +2,15 @@
 #include "SensorType.h"
 #include <iostream>
 
-AirqualitySensor::AirqualitySensor(double MinSimulation, double MaxSimulation, string NewName)
+
+AirqualitySensor::AirqualitySensor(std::string NewName, double MinSimulation, double MaxSimulation)
 	: Sensor(NewName, MinSimulation, MaxSimulation) {
 };
 
-TemperatureSensor::TemperatureSensor(double MinSimulation, double MaxSimulation, string NewName)
+TemperatureSensor::TemperatureSensor(std::string NewName, double MinSimulation, double MaxSimulation)
 	: Sensor(NewName, MinSimulation, MaxSimulation) {
 };
 
-HumiditySensor::HumiditySensor(double MinSimulation, double MaxSimulation, string NewName)
+HumiditySensor::HumiditySensor(std::string NewName, double MinSimulation, double MaxSimulation)
 	: Sensor(NewName, MinSimulation, MaxSimulation) {
 };

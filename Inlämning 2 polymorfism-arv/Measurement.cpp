@@ -1,14 +1,16 @@
 #include "Measurement.h"
+#include "Utility.h"
+#include "Sensor.h"
 #include <iostream>
 
-void Measurement::GetReading(string NewSensorName, double NewMeasurement, string NewUnitOfMeasurment, string NewTimeStamp)
+void Measurement::GetReading(unique_ptr<Sensor>& NewSensor)
 {
-	SensorName = NewSensorName;
-	Measurement = NewMeasurement;
-	UnitOfMeasurment = NewUnitOfMeasurment;
-	TimeStamp = NewTimeStamp;
+	SensorName = NewSensor->name();
+	SensorMeasurement = NewSensor->Read();
+	UnitOfMeasurment = NewSensor->GetUnitOfMeasurment();
+	TimeStamp = Utility::TimeGenerator();
 }
 void Measurement::PrintMeasurement()const
 {
-	cout << SensorName << " \n" << TimeStamp << "\n" << Measurement << " " << UnitOfMeasurment << endl;
+	cout << SensorName << " \n" << TimeStamp << "\n" << SensorMeasurement << " " << UnitOfMeasurment << endl;
 }

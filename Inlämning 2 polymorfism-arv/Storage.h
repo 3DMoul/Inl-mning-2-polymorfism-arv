@@ -1,26 +1,23 @@
 #pragma once
-#include "TemperatureSensor.h"
-#include "AirqualitySensor.h"
 #include "Measurement.h"
+#include "Sensor.h"
 #include <vector>
 #include <fstream>
-
-using namespace std;
 class Storage
 {
 private:
-	static vector <Measurement> MeasurmentsList;
+	static std::vector <Measurement> MeasurmentsList;
 public:
 	static int SizeOfAirquality();
 	static int SizeOfTemperature();
 	static int SizeOfList();
-	bool SearchForName(string Name);
-	bool SearchForTimeStamp(string Name);
-	static void GetMeasurementReading(const Measurement& NewMeasurement);
+	bool SearchForName(std::string Name);
+	bool SearchForTimeStamp(std::string Name);
+	static void GetMeasurementReading(char Sensor);
 	static void PrintTemperatureReadings();
 	static void PrintAirqualityReadings();
 	static void PrintAll();
-	static void WriteFile(string TimeStamp, string UnitOfMeasurment, string SensorName, double SensorReading);
+	static void WriteFile(Measurement& NewMeasurementReadings);
 	static void ReadFile();
 	static void Visulisation(const char IN);
 	double SumOfTemperature();

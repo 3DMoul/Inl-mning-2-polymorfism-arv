@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
+//enum class SensorScript {};
 double Utility::RandomTempreture(double Min, double Max)
 {
     double f = (double)rand() / RAND_MAX;
@@ -47,4 +48,42 @@ void Utility::ENTER()
     getline(cin, str);
     streamsize InputBufferLimit = 10000;
     cin.ignore(InputBufferLimit, '\n');
+}
+void Utility::PrintMenu()
+{
+    system("CLS");
+    cout << "---------------------------------" << endl;
+    cout << "[1] Adding sensor readings" << endl;
+    cout << "[2] Read out readings" << endl;
+    cout << "[3] Statistics of readings" << endl;
+    cout << "[4] Visual representation of data" << endl;
+    cout << "[5] Search for readings" << endl;
+    cout << "[6] Exit program" << endl;
+    cout << "---------------------------------" << endl;
+}
+void Utility::Simulationmenu()
+{
+    cout << "Do you want to simulate sensor readings" << endl;
+    cout << "[T]emperature / [A]irquality / [H]umidity / [B]oth" << endl;
+    cout << "If you dont want to simulate anything press [Q]" << endl;
+}
+void Utility::PrintReadingMenu()
+{
+    cout << "You have [" << Storage::SizeOfAirquality() << "]" << " Airquality readings" << endl;
+    cout << "You have [" << Storage::SizeOfTemperature() << "]" << " Temperature readings" << endl;
+    cout << "Do you want to print sensor readings" << endl;
+    cout << "[T]emperature / [A]irquality / [H]umidity / [B]oth" << endl;
+    cout << "If you dont want to print anything press [Q]" << endl;
+}
+string TemperatureScrips::SimulatingSensorScript()const
+{
+    return "How many Temperature readings do you want to simulate?";
+}
+string AirqualityScrips::SimulatingSensorScript()const
+{
+    return "How many Airquality readings do you want to simulate?";
+}
+string HumidityScrips::SimulatingSensorScript()const
+{
+    return "How many Humidity readings do you want to simulate?";
 }

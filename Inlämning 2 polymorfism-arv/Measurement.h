@@ -1,13 +1,14 @@
 #pragma once
+#include "Sensor.h"
 #include <string>
 using namespace std;
 
 struct Measurement
 {
-	string SensorName;
-	double Measurement;
-	string UnitOfMeasurment;
-	string TimeStamp;
-	void GetReading(string NewSensorName, double NewMeasurement, string NewUnitOfMeasurment, string NewTimeStamp);
+	static std::string SensorName;
+	static double SensorMeasurement;
+	static std::string UnitOfMeasurment;
+	static std::string TimeStamp;
+	static void GetReading(unique_ptr<Sensor>& NewSensor);
 	void PrintMeasurement()const;
 };

@@ -1,7 +1,6 @@
 #pragma once
-#include "Sensor.h"
 #include <iostream>
-enum class SensorType { AirqualitySensor = 'A', TemperatureSensor = 'T', HumiditySensor = 'H'};
+#include "Sensor.h"
 class AirqualitySensor : public Sensor
 {
 private:

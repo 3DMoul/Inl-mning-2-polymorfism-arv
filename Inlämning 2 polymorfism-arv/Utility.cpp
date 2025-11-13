@@ -72,18 +72,18 @@ void Utility::PrintReadingMenu()
     cout << "You have [" << Storage::SizeOfAirquality() << "]" << " Airquality readings" << endl;
     cout << "You have [" << Storage::SizeOfTemperature() << "]" << " Temperature readings" << endl;
     cout << "Do you want to print sensor readings" << endl;
-    cout << "[T]emperature / [A]irquality / [H]umidity / [B]oth" << endl;
+    cout << "[T]emperature / [A]irquality / [H]umidity / [A]ll" << endl;
     cout << "If you dont want to print anything press [Q]" << endl;
 }
-string TemperatureScrips::SimulatingSensorScript()const
+string TemperatureScripts::SimulatingSensorScript()const
 {
     return "How many Temperature readings do you want to simulate?";
 }
-string AirqualityScrips::SimulatingSensorScript()const
+string AirqualityScripts::SimulatingSensorScript()const
 {
     return "How many Airquality readings do you want to simulate?";
 }
-string HumidityScrips::SimulatingSensorScript()const
+string HumidityScripts::SimulatingSensorScript()const
 {
     return "How many Humidity readings do you want to simulate?";
 }

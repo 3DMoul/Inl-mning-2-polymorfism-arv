@@ -1,7 +1,6 @@
 #pragma once
 #include "Storage.h"
 using namespace std;
-enum class TypeScript { AirqualityScrips = 'A', TemperatureScrips = 'T', HumidityScrips = 'H'};
 class Utility
 {
 public:
@@ -15,19 +14,19 @@ public:
 	void PrintReadingMenu();
 };
 // here is all the text for all the different options
-struct Script {
+struct Script {//promt message
 	virtual ~Script() = default;
 	virtual string SimulatingSensorScript()const = 0;
 };
-struct TemperatureScrips : Script
+struct TemperatureScripts : Script
 {
 	string SimulatingSensorScript()const override;
 };
-struct AirqualityScrips : Script
+struct AirqualityScripts : Script
 {
 	string SimulatingSensorScript()const override;
 };
-struct HumidityScrips : Script
+struct HumidityScripts : Script
 {
 	string SimulatingSensorScript()const override;
 };

@@ -3,7 +3,7 @@
 #include <fstream>
 #include "SystemController.h"
 #include "Storage.cpp"
-
+std::vector<std::unique_ptr<Sensor>> SystemController::sensors;
 
 void SystemController::addSensor(std::unique_ptr<Sensor> s)
 {
@@ -46,11 +46,11 @@ void SystemController::saveToFile(std::unique_ptr<Sensor>& sensor) const
         sensorConfig.close();
     }
 }
-void SystemController::loadFromFile(const std::string& path)
+void SystemController::loadFromFile()
 {
     std::ifstream SensorConfig;
     //går igenom värdena som var innan och skickar in dem i listan
-    SensorConfig.open("SensorReading2.txt", std::ios::in);
+    SensorConfig.open("SensorConfig.txt", std::ios::in);
     if (SensorConfig.is_open())
     {
         int times = 0;

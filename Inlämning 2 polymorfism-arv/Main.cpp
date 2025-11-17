@@ -4,12 +4,15 @@
 #include "SensorType.h"
 #include <iostream>
 #include <vector>
+#include "SystemController.h"
 using namespace std;
 int main()
 {
 	Utility Utility;
 	Storage MainStorage;
+	SystemController systemController;
 	MainStorage.ReadFile();
+	systemController.loadFromFile();
 	bool MainLoopActive = true;
 	while (MainLoopActive == true)
 	{

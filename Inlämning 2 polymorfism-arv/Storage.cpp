@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include "SystemController.h"
 std::vector <Measurement> Storage::MeasurmentsList;
 // Puts Readings in vector 
 static std::unique_ptr<Sensor> MakeSensor(SensorType& type, const std::string& newname, double min, double max)
@@ -29,10 +30,10 @@ static std::unique_ptr<promt> makePromt(SensorType& type)
     default: return nullptr;
     }
 }
-void Storage::GetMeasurementReading(char Type)
+void Storage::GetMeasurementReading(char type)
 {
     std::cout << "here" << std::endl;
-    SensorType sensorType = static_cast<SensorType>(Type);
+    SensorType sensorType = static_cast<SensorType>(type);
     auto sensorPrompt = makePromt(sensorType);
     if (!sensorPrompt)
     {
@@ -40,24 +41,26 @@ void Storage::GetMeasurementReading(char Type)
         return;
     }
     string strPromt = sensorPrompt->SimulatingSensorpromt();
-    int Iterations = Utility::NumberChoice(strPromt);//amout of sensors
-    for (int i = 0; i < Iterations; i++)
+    int amountOfSensors = Utility::NumberChoice(strPromt);//amout of sensors
+    for (int i = 0; i < amountOfSensors; i++)
     {
         std::cout << "What is the name of your sensor: " << std::endl;
-        std::string NewSensorName;
-        std::cin >> NewSensorName;
+        std::string newSensorName;
+        std::cin >> newSensorName;
         std::cout << "Pick your interval values MinValue: " << std::endl;
-        double MinValue = 0;
-        std::cin >> MinValue;
+        double minValue = 0;
+        std::cin >> minValue;
         std::cout << "Pick your interval values MaxValue: " << std::endl;
-        double MaxValue = 0;
-        std::cin >> MaxValue;
-        SensorType typeSens = static_cast<SensorType>(Type);
-        auto newSensor = MakeSensor(typeSens, NewSensorName, MinValue, MaxValue);
-        Measurement NewMeasurement;
-        NewMeasurement.GetReading(newSensor);
-        WriteFile(NewMeasurement);
-        MeasurmentsList.push_back(NewMeasurement);
+        double maxValue = 0;
+        std::cin >> maxValue;
+        SensorType typeSens = static_cast<SensorType>(type);
+        auto newSensor = MakeSensor(typeSens, newSensorName, minValue, maxValue);
+        SystemController sensorFile;
+        sensorFile.saveToFile(newSensor);
+        Measurement newMeasurement;
+        newMeasurement.GetReading(newSensor);
+        WriteFile(newMeasurement);
+        MeasurmentsList.push_back(newMeasurement);
     }
 }
 

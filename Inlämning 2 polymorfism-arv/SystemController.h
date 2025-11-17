@@ -11,7 +11,7 @@ public:
 	void showAlerts() const;
 	void showStatsFor(const std::string& sensorName) const;
 	void saveToFile(std::unique_ptr<Sensor>& sensor) const;
-	void loadFromFile(const std::string& path);
+	void loadFromFile();
 private:
-	std::vector<std::unique_ptr<Sensor>> sensors;
+	static std::vector<std::unique_ptr<Sensor>> sensors;
 };

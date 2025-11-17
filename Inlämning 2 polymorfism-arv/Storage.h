@@ -13,7 +13,7 @@ public:
 	static int SizeOfList();
 	bool SearchForName(std::string Name);
 	bool SearchForTimeStamp(std::string Name);
-	static void GetMeasurementReading(char Sensor);
+	static void GetMeasurementReading(char type);
 	static void PrintTemperatureReadings();
 	static void PrintAirqualityReadings();
 	static void PrintAll();

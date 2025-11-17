@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "SensorType.h"
 enum class SensorType { Airquality = 'A', Temperature = 'T', Humidity = 'H' };
 
 class Sensor
@@ -16,5 +15,8 @@ public:
 	virtual ~Sensor() = default;
 	double Read() const;
 	std::string name() const;
+	double minValue() const;
+	double maxValue() const;
 	std::string GetUnitOfMeasurment() const;
+	SensorType sensorType()const;
 };

@@ -4,11 +4,10 @@
 #include "SensorType.h"
 #include <iostream>
 #include <string>
-#include <chrono>
 #include <thread>
 std::vector <Measurement> Storage::MeasurmentsList;
 // Puts Readings in vector 
-static std::unique_ptr<Sensor> MakeSensor(SensorType type, const std::string& newname, double min, double max)
+static std::unique_ptr<Sensor> MakeSensor(SensorType& type, const std::string& newname, double min, double max)
 {
     switch (type) 
     {
@@ -19,22 +18,29 @@ static std::unique_ptr<Sensor> MakeSensor(SensorType type, const std::string& ne
         default: return nullptr;
     }
 }
-static std::unique_ptr<Script> MakeScript(SensorType type)
+static std::unique_ptr<promt> makePromt(SensorType& type)
 {
     switch (type)
     {
-    case SensorType::Airquality: return std::make_unique<AirqualityScripts>();
-    case SensorType::Temperature: return std::make_unique<TemperatureScripts>();
-    case SensorType::Humidity: return std::make_unique<HumidityScripts>();
+    case SensorType::Airquality: return std::make_unique<airqualityPromts>();
+    case SensorType::Temperature: return std::make_unique<temperaturePromts>();
+    case SensorType::Humidity: return std::make_unique<humidityPromts>();
 
     default: return nullptr;
     }
 }
 void Storage::GetMeasurementReading(char Type)
 {
+    std::cout << "here" << std::endl;
     SensorType sensorType = static_cast<SensorType>(Type);
-    auto sensorPrompt = MakeScript(sensorType);
-    int Iterations = Utility::NumberChoice(sensorPrompt->SimulatingSensorScript());//amout of sensors
+    auto sensorPrompt = makePromt(sensorType);
+    if (!sensorPrompt)
+    {
+        std::cerr << "Invalid sensor type!\n";
+        return;
+    }
+    string strPromt = sensorPrompt->SimulatingSensorpromt();
+    int Iterations = Utility::NumberChoice(strPromt);//amout of sensors
     for (int i = 0; i < Iterations; i++)
     {
         std::cout << "What is the name of your sensor: " << std::endl;

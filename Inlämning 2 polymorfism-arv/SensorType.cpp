@@ -1,4 +1,3 @@
-#include "Sensor.h"
 #include "SensorType.h"
 #include <iostream>
 

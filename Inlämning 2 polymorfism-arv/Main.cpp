@@ -49,6 +49,10 @@ int main()
 					MainStorage.GetMeasurementReading('A');
 					SimulatorRunning = false;
 				}
+				else if ((char)toupper(Des) == 'Q')
+				{
+					SimulatorRunning = false;
+				}
 				else
 				{
 					cout << "Wrong input" << endl;

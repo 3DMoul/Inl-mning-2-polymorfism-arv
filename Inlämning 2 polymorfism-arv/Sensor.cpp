@@ -13,7 +13,19 @@ string Sensor::name() const
 {
 	return SensorName;
 }
+double Sensor::minValue() const
+{
+	return MinSimulation;
+}
+double Sensor::maxValue() const
+{
+	return MaxSimulation;
+}
 string Sensor::GetUnitOfMeasurment() const
 {
 	return UnitOfMeasurment;
+}
+SensorType Sensor::sensorType()const
+{
+	return type;
 }

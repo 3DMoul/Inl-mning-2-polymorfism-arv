@@ -5,10 +5,11 @@ using namespace std;
 
 struct Measurement
 {
-	static std::string SensorName;
-	static double SensorMeasurement;
-	static std::string UnitOfMeasurment;
-	static std::string TimeStamp;
-	static void GetReading(unique_ptr<Sensor>& NewSensor);
+public:
+	std::string SensorName;
+	double SensorMeasurement;
+	std::string UnitOfMeasurment;
+	std::string TimeStamp;
+	void GetReading(unique_ptr<Sensor>& NewSensor);
 	void PrintMeasurement()const;
 };

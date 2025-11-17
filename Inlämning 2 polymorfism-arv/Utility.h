@@ -14,19 +14,20 @@ public:
 	void PrintReadingMenu();
 };
 // here is all the text for all the different options
-struct Script {//promt message
-	virtual ~Script() = default;
-	virtual string SimulatingSensorScript()const = 0;
+struct promt 
+{//promt message
+	virtual ~promt() = default;
+	virtual string SimulatingSensorpromt()const = 0;
 };
-struct TemperatureScripts : Script
+struct temperaturePromts : promt
 {
-	string SimulatingSensorScript()const override;
+	string SimulatingSensorpromt()const override;
 };
-struct AirqualityScripts : Script
+struct airqualityPromts : promt
 {
-	string SimulatingSensorScript()const override;
+	string SimulatingSensorpromt()const override;
 };
-struct HumidityScripts : Script
+struct humidityPromts : promt
 {
-	string SimulatingSensorScript()const override;
+	string SimulatingSensorpromt()const override;
 };

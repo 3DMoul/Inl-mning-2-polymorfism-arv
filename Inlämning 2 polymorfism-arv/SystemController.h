@@ -21,5 +21,4 @@ private:
 	static std::vector<std::unique_ptr<Sensor>> sensors;
 	static std::vector <Threshold> thresholdList;
 	int alarmCount = 0;
-
 };

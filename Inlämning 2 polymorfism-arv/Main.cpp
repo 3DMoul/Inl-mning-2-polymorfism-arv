@@ -472,6 +472,7 @@ int main()
 					cout << "Wrong input" << endl;
 				}
 			}
+			Utility.ENTER();
 		}
 		break;
 		case 9:

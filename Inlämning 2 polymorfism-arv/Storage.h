@@ -1,8 +1,8 @@
 #pragma once
-#include "Measurement.h"
-#include "Sensor.h"
 #include <vector>
 #include <fstream>
+#include "Sensor.h"
+#include "Measurement.h"
 class Storage
 {
 private:
@@ -13,7 +13,7 @@ public:
 	static int SizeOfList();
 	bool SearchForName(std::string Name);
 	bool SearchForTimeStamp(std::string Name);
-	static void GetMeasurementReading(char Sensor);
+	static void GetMeasurementReading(char type);
 	static void PrintTemperatureReadings();
 	static void PrintAirqualityReadings();
 	static void PrintAll();

@@ -128,6 +128,7 @@
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="SensorType.cpp" />
     <ClCompile Include="Storage.cpp" />
+    <ClCompile Include="SystemController.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>

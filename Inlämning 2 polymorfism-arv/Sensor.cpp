@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 
-Sensor::Sensor(std::string SensorName, double MinSimulation, double MaxSimulation)
-	: SensorName(SensorName), MinSimulation(MinSimulation), MaxSimulation(MaxSimulation) {};
+Sensor::Sensor(SensorType type, std::string SensorName, double MinSimulation, double MaxSimulation)
+	: type(type), SensorName(SensorName), MinSimulation(MinSimulation), MaxSimulation(MaxSimulation) {};
 double Sensor::Read() const
 {
 	return Utility::RandomTempreture(MinSimulation, MaxSimulation);
@@ -13,7 +13,19 @@ string Sensor::name() const
 {
 	return SensorName;
 }
+double Sensor::minValue() const
+{
+	return MinSimulation;
+}
+double Sensor::maxValue() const
+{
+	return MaxSimulation;
+}
 string Sensor::GetUnitOfMeasurment() const
 {
 	return UnitOfMeasurment;
+}
+SensorType Sensor::sensorType()const
+{
+	return type;
 }

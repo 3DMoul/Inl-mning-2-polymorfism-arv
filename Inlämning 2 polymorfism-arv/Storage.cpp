@@ -4,55 +4,63 @@
 #include "SensorType.h"
 #include <iostream>
 #include <string>
-#include <chrono>
 #include <thread>
-vector <Measurement> Storage::MeasurmentsList;
+#include "SystemController.h"
+std::vector <Measurement> Storage::MeasurmentsList;
 // Puts Readings in vector 
-static std::unique_ptr<Sensor> MakeSensor(SensorType type)
+static std::unique_ptr<Sensor> MakeSensor(SensorType& type, const std::string& newname, double min, double max)
 {
     switch (type) 
     {
-        case SensorType::AirqualitySensor: return std::make_unique<AirqualitySensor>();
-        case SensorType::TemperatureSensor: return std::make_unique<TemperatureSensor>();
-        case SensorType::HumiditySensor: return std::make_unique<HumiditySensor>();
+        case SensorType::Airquality: return std::make_unique<AirqualitySensor>(newname, min, max);
+        case SensorType::Temperature: return std::make_unique<TemperatureSensor>(newname, min, max);
+        case SensorType::Humidity: return std::make_unique<HumiditySensor>(newname, min, max);
 
         default: return nullptr;
     }
 }
-static std::unique_ptr<Script> MakeScript(TypeScript type)
+static std::unique_ptr<promt> makePromt(SensorType& type)
 {
     switch (type)
     {
-    case TypeScript::AirqualityScrips: return std::make_unique<AirqualityScrips>();
-    case TypeScript::TemperatureScrips: return std::make_unique<TemperatureScrips>();
-    case TypeScript::HumidityScrips: return std::make_unique<HumidityScrips>();
+    case SensorType::Airquality: return std::make_unique<airqualityPromts>();
+    case SensorType::Temperature: return std::make_unique<temperaturePromts>();
+    case SensorType::Humidity: return std::make_unique<humidityPromts>();
 
     default: return nullptr;
     }
 }
-void Storage::GetMeasurementReading(char Type)
+void Storage::GetMeasurementReading(char type)
 {
-    TypeScript typeScrip = static_cast<TypeScript>(Type);
-    auto Scriptnow = MakeScript(typeScrip);
-    int Iterations = Utility::NumberChoice(Scriptnow->SimulatingSensorScript());
-    for (int i = 0; i < Iterations; i++)
+    std::cout << "here" << std::endl;
+    SensorType sensorType = static_cast<SensorType>(type);
+    auto sensorPrompt = makePromt(sensorType);
+    if (!sensorPrompt)
+    {
+        std::cerr << "Invalid sensor type!\n";
+        return;
+    }
+    string strPromt = sensorPrompt->SimulatingSensorpromt();
+    int amountOfSensors = Utility::NumberChoice(strPromt);//amout of sensors
+    for (int i = 0; i < amountOfSensors; i++)
     {
         std::cout << "What is the name of your sensor: " << std::endl;
-        std::string NewSensorName;
-        std::cin >> NewSensorName;
+        std::string newSensorName;
+        std::cin >> newSensorName;
         std::cout << "Pick your interval values MinValue: " << std::endl;
-        double MinValue = 0;
-        std::cin >> MinValue;
+        double minValue = 0;
+        std::cin >> minValue;
         std::cout << "Pick your interval values MaxValue: " << std::endl;
-        double MaxValue = 0;
-        std::cin >> MaxValue;
-        Sensor::Sensor(NewSensorName, MinValue, MaxValue);
-        SensorType typeSens = static_cast<SensorType>(Type);
-        auto SensorNow = MakeSensor(typeSens);
-        Measurement New_Measurement_struct;
-        New_Measurement_struct.GetReading(SensorNow);
-        WriteFile(New_Measurement_struct);
-        MeasurmentsList.push_back(New_Measurement_struct);
+        double maxValue = 0;
+        std::cin >> maxValue;
+        SensorType typeSens = static_cast<SensorType>(type);
+        auto newSensor = MakeSensor(typeSens, newSensorName, minValue, maxValue);
+        SystemController sensorFile;
+        sensorFile.saveToFile(newSensor);
+        Measurement newMeasurement;
+        newMeasurement.GetReading(newSensor);
+        WriteFile(newMeasurement);
+        MeasurmentsList.push_back(newMeasurement);
     }
 }
 

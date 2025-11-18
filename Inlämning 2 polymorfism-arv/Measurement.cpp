@@ -1,4 +1,3 @@
-#include "Measurement.h"
 #include "Utility.h"
 #include "Sensor.h"
 #include <iostream>

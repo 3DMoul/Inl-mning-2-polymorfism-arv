@@ -3,25 +3,88 @@
 #include <fstream>
 #include "SystemController.h"
 #include "Storage.cpp"
+#include "ThresHold.h"
 std::vector<std::unique_ptr<Sensor>> SystemController::sensors;
-
-void SystemController::addSensor(std::unique_ptr<Sensor> s)
+void SystemController::addSensor(std::unique_ptr<Sensor>& s)
 {
 	sensors.push_back(s);
 }
-void SystemController::sampleAllOnce()
+void SystemController::checkAlarm()
 {
+    for (auto& currentThresHold : thresholdList)
+    {
+        for (auto& currentMeasurement : Storage::getMeasurments())
+        {
+            if (currentThresHold.SensorNamn == currentMeasurement.SensorName)
+            {
+                if (currentThresHold.Limit < currentMeasurement.SensorMeasurement)
+                {
+                    if (currentThresHold.Over == true) { alarmCount++; currentThresHold.Over = false; }
+                }
+            }
 
+        }
+    }
 }
-void SystemController::configureThreshold()
+int SystemController::getAlarmCount() const
 {
-
+    return alarmCount;
+}
+void SystemController::configureThreshold(const std::string& name)
+{
+    Threshold newThresHold;
+    newThresHold.SensorNamn = name;
+    std::cout << "what do you want your threshold limit to be: ";
+    std::cin >> newThresHold.Limit;
+    thresholdList.push_back(newThresHold);
 }
 void SystemController::showAlerts() const
 {
+    for (auto& currentThresHold : thresholdList)
+    {
+        std::cout << currentThresHold.SensorNamn << std::endl;
+        std::cout << currentThresHold.Limit << std::endl;
+        std::cout << currentThresHold.Over << std::endl;
+    }
+}
+void SystemController::showSensorConfig()
+{
+    std::cout << "Temperature sensors: " << std::endl;
+    for (auto& CurrentSensor : sensors)
+    {
+        if (CurrentSensor->GetUnitOfMeasurment() == "C")
+        {
+
+            std::cout << "Sensor name: " << CurrentSensor->name() << std::endl;
+            std::cout << "Maxvalue is: " << CurrentSensor->maxValue() << std::endl;
+            std::cout << "Minvalue is: " << CurrentSensor->minValue() << std::endl;
+
+        }
+    }
+    std::cout << "Airquality sensors: " << std::endl;
+    for (auto& CurrentSensor : sensors)
+    {
+        if (CurrentSensor->GetUnitOfMeasurment() == "%")
+        {
+            std::cout << "Sensor name: " << CurrentSensor->name() << std::endl;
+            std::cout << "Maxvalue is: " << CurrentSensor->maxValue() << std::endl;
+            std::cout << "Minvalue is: " << CurrentSensor->minValue() << std::endl;
+        }
+    }
+    std::cout << "Humidity sensors: " << std::endl;
+    for (auto& CurrentSensor : sensors)
+    {
+        if (CurrentSensor->GetUnitOfMeasurment() == "AH")
+        {
+            std::cout << "Sensor name: " << CurrentSensor->name() << std::endl;
+            std::cout << "Maxvalue is: " << CurrentSensor->maxValue() << std::endl;
+            std::cout << "Minvalue is: " << CurrentSensor->minValue() << std::endl;
+        }
+    }
+
 
 }
-void SystemController::showStatsFor(const std::string& sensorName) const
+void SystemController::showStatsFor(std::string sensorName) const
 {
 	for (auto& sensor : sensors)
 	{

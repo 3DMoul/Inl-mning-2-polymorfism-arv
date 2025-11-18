@@ -1,8 +1,9 @@
-#include "Utility.h"
-#include "Storage.h"
 #include <random>
 #include <iostream>
 #include <fstream>
+#include "Utility.h"
+#include "Storage.h"
+#include "SystemController.h"
 using namespace std;
 //enum class SensorScript {};
 double Utility::RandomTempreture(double Min, double Max)
@@ -58,22 +59,60 @@ void Utility::PrintMenu()
     cout << "[3] Statistics of readings" << endl;
     cout << "[4] Visual representation of data" << endl;
     cout << "[5] Search for readings" << endl;
-    cout << "[6] Exit program" << endl;
+    cout << "[6] Edit threshold rules" << endl;
+    cout << "[7] Show alarm" << endl;
+    cout << "[8] Show sensor configs" << endl;
+    cout << "[9] Exit program" << endl;
     cout << "---------------------------------" << endl;
 }
 void Utility::Simulationmenu()
 {
     cout << "Do you want to simulate sensor readings" << endl;
-    cout << "[T]emperature / [A]irquality / [H]umidity / [B]oth" << endl;
+    cout << "[T] emperature / [A]irquality / [H]umidity / [E]very sensor type" << endl;
     cout << "If you dont want to simulate anything press [Q]" << endl;
 }
 void Utility::PrintReadingMenu()
 {
     cout << "You have [" << Storage::SizeOfAirquality() << "]" << " Airquality readings" << endl;
     cout << "You have [" << Storage::SizeOfTemperature() << "]" << " Temperature readings" << endl;
+    cout << "You have [" << Storage::sizeOfHumidity() << "]" << " Humidity readings" << endl;
     cout << "Do you want to print sensor readings" << endl;
-    cout << "[T]emperature / [A]irquality / [H]umidity / [A]ll" << endl;
+    cout << "[T] emperature / [A]irquality / [H]umidity / [E]very sensor type" << endl;
     cout << "If you dont want to print anything press [Q]" << endl;
+}
+void Utility::StatisticMenu()
+{
+    cout << "You have [" << Storage::SizeOfAirquality() << "] Airquality readings" << endl;
+    cout << "You have [" << Storage::SizeOfTemperature() << "] Temperature readings" << endl;
+    cout << "You have [" << Storage::sizeOfHumidity() << "] Humidity readings" << endl;
+    cout << "What do you want statistics of" << endl;
+    cout << "[T] emperature / [A]irquality / [H]umidity / [E]very sensor type" << endl;
+    cout << "If you dont want statistics of anything press [Q]" << endl;
+}
+void Utility::visualRepMenu() 
+{
+    cout << "Do you want to print sensor readings" << endl;
+    cout << "[T] emperature / [A]irquality / [H]umidity / [E]very sensor type" << endl;
+    cout << "If you dont want to print anything press [Q]" << endl;
+}
+void Utility::searchMenu()
+{
+    cout << "What Sensor do you want a reading from" << endl;
+    cout << "You can search with [N]ames or [T]ime" << endl;
+    cout << "If you dont want to search for anything press [Q]" << endl;
+}
+
+void Utility::showAlarmMenu()
+{
+    cout << "Do you want to see all the alarms" << endl;
+    cout << "[Y]es / [N]o" << endl;
+    cout << "If you dont want to see alarms press [Q]" << endl;
+}
+void Utility::sensorConfigsMenu()
+{
+    cout << "Do you want to see all the sensor configs" << endl;
+    cout << "[Y]es / [N]o" << endl;
+    cout << "If you dont want to see alarms press [Q]" << endl;
 }
 string temperaturePromts::SimulatingSensorpromt()const
 {

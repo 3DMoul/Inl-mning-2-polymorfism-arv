@@ -53,7 +53,7 @@
     <ClInclude Include="SensorType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Structs.h">
+    <ClInclude Include="ThresHold.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SystemController.h">

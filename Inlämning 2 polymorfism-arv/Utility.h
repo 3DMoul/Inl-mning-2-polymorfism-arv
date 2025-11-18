@@ -12,6 +12,11 @@ public:
 	void PrintMenu();
 	void Simulationmenu();
 	void PrintReadingMenu();
+	void StatisticMenu();
+	void visualRepMenu();
+	void searchMenu();
+	void showAlarmMenu();
+	void sensorConfigsMenu();
 };
 // here is all the text for all the different options
 struct promt 

@@ -136,7 +136,7 @@
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="SensorType.h" />
     <ClInclude Include="Storage.h" />
-    <ClInclude Include="Structs.h" />
+    <ClInclude Include="ThresHold.h" />
     <ClInclude Include="SystemController.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>

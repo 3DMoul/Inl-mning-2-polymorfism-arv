@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-Sensor::Sensor(SensorType type, std::string SensorName, double MinSimulation, double MaxSimulation)
+Sensor::Sensor(SensorType type, std::string UnitOfMeasurment, std::string SensorName, double MinSimulation, double MaxSimulation)
 	: type(type), SensorName(SensorName), MinSimulation(MinSimulation), MaxSimulation(MaxSimulation) {};
 double Sensor::Read() const
 {

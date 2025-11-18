@@ -16,8 +16,11 @@ int main()
 	bool MainLoopActive = true;
 	while (MainLoopActive == true)
 	{
+		systemController.checkAlarm();
+		int alarmCounts = systemController.getAlarmCount();
+		std::cout << "The amount of alarms active is: " << alarmCounts << std::endl;
 		Utility.PrintMenu();
-		string NumberChoice = "Choice between [1]-[6]";
+		string NumberChoice = "Choice between [1]-[9]";
 		int Choice = Utility.NumberChoice(NumberChoice);
 		switch (Choice)
 		{
@@ -28,31 +31,32 @@ int main()
 			while (SimulatorRunning == true)
 			{
 				Utility.Simulationmenu();
-				char Des;
-				cin >> Des;
+				char typeChoice;
+				cin >> typeChoice;
 				//använder toupper så man kan skriva bådde stor eller liten bokstav
-				if ((char)toupper(Des) == 'T')
+				if (static_cast<char>(std::toupper(typeChoice)) == 'T')
 				{
-					MainStorage.GetMeasurementReading(Des);
+					MainStorage.GetMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
 					SimulatorRunning = false;
 				}
-				else if ((char)toupper(Des) == 'A')
+				else if (static_cast<char>(std::toupper(typeChoice)) == 'A')
 				{
-					MainStorage.GetMeasurementReading(Des);
+					MainStorage.GetMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
 					SimulatorRunning = false;
 				}
-				else if ((char)toupper(Des) == 'H')
+				else if (static_cast<char>(std::toupper(typeChoice)) == 'H')
 				{
-					MainStorage.GetMeasurementReading(Des);
+					MainStorage.GetMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
 					SimulatorRunning = false;
 				}
-				else if ((char)toupper(Des) == 'B')
+				else if (static_cast<char>(std::toupper(typeChoice)) == 'E')
 				{
 					MainStorage.GetMeasurementReading('T');
 					MainStorage.GetMeasurementReading('A');
+					MainStorage.GetMeasurementReading('H');
 					SimulatorRunning = false;
 				}
-				else if ((char)toupper(Des) == 'Q')
+				else if (static_cast<char>(std::toupper(typeChoice)) == 'Q')
 				{
 					SimulatorRunning = false;
 				}
@@ -70,16 +74,16 @@ int main()
 			bool PrintLoopisRunning = true;
 			while (PrintLoopisRunning == true)
 			{
-				if (MainStorage.SizeOfAirquality() >= 1 || MainStorage.SizeOfTemperature() >= 1)
+				if (MainStorage.SizeOfAirquality() > 0 || MainStorage.SizeOfTemperature() > 0 || MainStorage.sizeOfHumidity() > 0)
 				{
 
 					Utility.PrintReadingMenu();
-					char Des;
-					cin >> Des;
+					char printRequest;
+					cin >> printRequest;
 					//använder toupper så man kan skriva bådde stor eller liten bokstav
-					if ((char)toupper(Des) == 'T')
+					if ((char)toupper(printRequest) == 'T')
 					{
-						if (MainStorage.SizeOfTemperature() >= 1)
+						if (MainStorage.SizeOfTemperature() > 0)
 						{
 							MainStorage.PrintTemperatureReadings();
 							PrintLoopisRunning = false;
@@ -89,9 +93,9 @@ int main()
 							cout << "you have no temperature readings" << endl;
 						}
 					}
-					else if ((char)toupper(Des) == 'A')
+					else if ((char)toupper(printRequest) == 'A')
 					{
-						if (MainStorage.SizeOfAirquality() >= 1)
+						if (MainStorage.SizeOfAirquality() > 0)
 						{
 							MainStorage.PrintAirqualityReadings();
 							PrintLoopisRunning = false;
@@ -101,26 +105,23 @@ int main()
 							cout << "you have no airquality readings" << endl;
 						}
 					}
-					else if ((char)toupper(Des) == 'B')
+					else if ((char)toupper(printRequest) == 'H')
 					{
-						if (MainStorage.SizeOfAirquality() >= 1 && MainStorage.SizeOfTemperature() >= 1)
+						if (MainStorage.sizeOfHumidity() > 0)
 						{
+							MainStorage.printHymidityReadings();
+							PrintLoopisRunning = false;
+						}
+						else
+						{
+							cout << "you have no humidity readings" << endl;
+						}
+					}
+					else if ((char)toupper(printRequest) == 'E')
+					{
 							MainStorage.PrintAll();
-						}
-						else if (MainStorage.SizeOfAirquality() < 1)
-						{
-							cout << "you have no airquality readings" << endl;
-							MainStorage.PrintTemperatureReadings();
-						}
-						else if (MainStorage.SizeOfTemperature() < 1)
-						{
-							cout << "you have no temperature readings" << endl;
-							MainStorage.PrintAirqualityReadings();
-						}
-						Utility.ENTER();
-						PrintLoopisRunning = false;
 					}
-					else if ((char)toupper(Des) == 'Q')
+					else if ((char)toupper(printRequest) == 'Q')
 					{
 						Utility.ENTER();
 						PrintLoopisRunning = false;
@@ -145,23 +146,19 @@ int main()
 			bool StatisticsLoopRunning = true;
 			while (StatisticsLoopRunning == true)
 			{
-				cout << "You have [" << MainStorage.SizeOfAirquality() << "] Airquality readings" << endl;
-				cout << "You have [" << MainStorage.SizeOfTemperature() << "] Temperature readings" << endl;
-				if (MainStorage.SizeOfAirquality() >= 1 || MainStorage.SizeOfTemperature() >= 1)
+				if (MainStorage.SizeOfAirquality() > 0 || MainStorage.SizeOfTemperature() > 0 || MainStorage.sizeOfHumidity() > 0)
 				{
-					cout << "What do you want statistics of" << endl;
-					cout << "[T]emperature / [A]irquality / [B]oth" << endl;
-					cout << "If you dont want statistics of anything press [Q]" << endl;
-					char Des;
-					cin >> Des;
-					if ((char)toupper(Des) == 'T')
+					Utility.StatisticMenu();
+					char sensorStat;
+					cin >> sensorStat;
+					if ((char)toupper(sensorStat) == 'T')
 					{
-						if (MainStorage.SizeOfTemperature() >= 1)
+						if (MainStorage.SizeOfTemperature() > 0)
 						{
 							double SumOfTemp = MainStorage.SumOfTemperature();
 							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
 							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << "C" << endl;
-							void MinMaxTemperature();
+							MainStorage.MinMaxTemperature();
 							double VarianceTemperature = MainStorage.TemperatureVariance(SumOfTemp);
 							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << "C" << std::endl;
 							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << "C" << std::endl;
@@ -171,14 +168,14 @@ int main()
 							cout << "You dont have any temperature readings" << endl;
 						}
 					}
-					else if ((char)toupper(Des) == 'A')
+					else if ((char)toupper(sensorStat) == 'A')
 					{
-						if (MainStorage.SizeOfAirquality() >= 1)
+						if (MainStorage.SizeOfAirquality() > 0)
 						{
 							double SumOfAirqual = MainStorage.SumOfAirquality();
 							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
 							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
-							void MinMaxAirquality();
+							MainStorage.MinMaxAirquality();
 							double VarianceAirqual = MainStorage.AirqualityVariance(SumOfAirqual);
 							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << "%" << endl;
 							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
@@ -188,49 +185,69 @@ int main()
 							cout << "You dont have any airquality readings" << endl;
 						}
 					}
-					else if ((char)toupper(Des) == 'B')
+					else if ((char)toupper(sensorStat) == 'H')
 					{
-						if (MainStorage.SizeOfAirquality() >= 1 && MainStorage.SizeOfTemperature() >= 1)
+						if (MainStorage.sizeOfHumidity() > 0)
+						{
+							double sumOfHumidity = MainStorage.sumOfHumidity();
+							cout << "The sum of all humidity readings is: " << sumOfHumidity << "AH" << endl;
+							cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfHumidity() << "AH" << endl;
+							MainStorage.MinMaxAirquality();
+							double varianceHumidity = MainStorage.humidityVariance(sumOfHumidity);
+							cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfHumidity() - 1) << "AH" << endl;
+							cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfHumidity() << "AH" << endl;
+						}
+						else
+						{
+							cout << "You dont have any humidity readings" << endl;
+						}
+					}
+					else if ((char)toupper(sensorStat) == 'E')
+					{
+						if (MainStorage.SizeOfTemperature() > 0)
 						{
 							double SumOfTemp = MainStorage.SumOfTemperature();
 							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
 							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << "C" << endl;
-							void MinMaxTemperature();
+							MainStorage.MinMaxTemperature();
 							double VarianceTemperature = MainStorage.TemperatureVariance(SumOfTemp);
-							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << "C" << endl;
-							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << "C" << endl;
+							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << "C" << std::endl;
+							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << "C" << std::endl;
+						}
+						else
+						{
+							cout << "You dont have any temperature readings" << endl;
+						}
+						if (MainStorage.SizeOfAirquality() > 0)
+						{
 							double SumOfAirqual = MainStorage.SumOfAirquality();
 							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
 							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
-							void MinMaxAirquality();
+							MainStorage.MinMaxAirquality();
 							double VarianceAirqual = MainStorage.AirqualityVariance(SumOfAirqual);
 							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << "%" << endl;
 							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
 						}
-						else if (MainStorage.SizeOfAirquality() >= 1 && MainStorage.SizeOfTemperature() < 1)
-						{
-							cout << "You dont have any temperature readings" << endl;
-							double SumOfAirqual = MainStorage.SumOfAirquality();
-							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
-							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfTemperature() << "%" << endl;
-							void MinMaxAirquality();
-							double VarianceAirqual = MainStorage.TemperatureVariance(SumOfAirqual);
-							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << "%" << endl;
-							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
-						}
-						else if (MainStorage.SizeOfAirquality() < 1 && MainStorage.SizeOfTemperature() >= 1)
+						else
 						{
 							cout << "You dont have any airquality readings" << endl;
-							double SumOfTemp = MainStorage.SumOfTemperature();
-							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
-							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << "C" << endl;
-							void MinMaxTemperature();
-							double VarianceTemperature = MainStorage.TemperatureVariance(SumOfTemp);
-							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << "C" << endl;
-							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << "C" << endl;
+						}
+						if (MainStorage.sizeOfHumidity() > 0)
+						{
+							double sumOfHumidity = MainStorage.sumOfHumidity();
+							cout << "The sum of all humidity readings is: " << sumOfHumidity << "AH" << endl;
+							cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfHumidity() << "AH" << endl;
+							MainStorage.MinMaxAirquality();
+							double varianceHumidity = MainStorage.humidityVariance(sumOfHumidity);
+							cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfHumidity() - 1) << "AH" << endl;
+							cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfHumidity() << "AH" << endl;
+						}
+						else
+						{
+							cout << "You dont have any humidity readings" << endl;
 						}
 					}
-					else if ((char)toupper(Des) == 'Q')
+					else if ((char)toupper(sensorStat) == 'Q')
 					{
 						StatisticsLoopRunning = false;
 					}
@@ -255,20 +272,18 @@ int main()
 			while (VisualisationLoopRunning == true)
 			{
 
-				if (MainStorage.SizeOfAirquality() >= 1 || MainStorage.SizeOfTemperature() >= 1)
+				if (MainStorage.SizeOfAirquality() > 0 || MainStorage.SizeOfTemperature() > 0 || MainStorage.sizeOfHumidity() > 0)
 				{
-					cout << "Do you want to print sensor readings" << endl;
-					cout << "[T]emperature / [A]irquality / [B]oth" << endl;
-					cout << "If you dont want to print anything press [Q]" << endl;
-					char Des;
-					cin >> Des;
+					Utility.visualRepMenu();
+					char visualisationRequest;
+					cin >> visualisationRequest;
 					//använder toupper så man kan skriva bådde stor eller liten bokstav
-					if ((char)toupper(Des) == 'T')
+					if ((char)toupper(visualisationRequest) == 'T')
 					{
-						if (MainStorage.SizeOfTemperature() >= 1)
+						if (MainStorage.SizeOfTemperature() > 0)
 						{
-							//detta går igenom bådde <TemperatureSensor> och <AirqualitySensor>
-							MainStorage.Visulisation(Des);
+							//detta går igenom Measurementlistan och vissar '*' i olicka mängder beroende på reading valuen
+							MainStorage.Visulisation(visualisationRequest);
 							Utility.ENTER();
 							VisualisationLoopRunning = false;
 						}
@@ -277,11 +292,11 @@ int main()
 							cout << "You dont have any temperatur readings" << endl;
 						}
 					}
-					else if ((char)toupper(Des) == 'A')
+					else if ((char)toupper(visualisationRequest) == 'A')
 					{
-						if (MainStorage.SizeOfAirquality() >= 1)
+						if (MainStorage.SizeOfAirquality() > 0)
 						{
-							MainStorage.Visulisation(Des);
+							MainStorage.Visulisation(visualisationRequest);
 							Utility.ENTER();
 							VisualisationLoopRunning = false;
 						}
@@ -290,27 +305,24 @@ int main()
 							cout << "You dont have any airquality readings" << endl;
 						}
 					}
-					else if ((char)toupper(Des) == 'B')
+					else if ((char)toupper(visualisationRequest) == 'H')
 					{
-						if (MainStorage.SizeOfAirquality() >= 1 && MainStorage.SizeOfTemperature() >= 1)
+						if (MainStorage.sizeOfHumidity() > 0)
 						{
-							MainStorage.Visulisation(Des);
+							MainStorage.Visulisation(visualisationRequest);
+							Utility.ENTER();
 							VisualisationLoopRunning = false;
 						}
-						else if (MainStorage.SizeOfAirquality() >= 1 && MainStorage.SizeOfTemperature() < 1)
+						else
 						{
-							cout << "You dont have any temperatur readings" << endl;
-							MainStorage.Visulisation(Des);
-							VisualisationLoopRunning = false;
-						}
-						else if (MainStorage.SizeOfAirquality() < 1 && MainStorage.SizeOfTemperature() >= 1)
-						{
-							cout << "You dont have any airquality readings" << endl;
-							MainStorage.Visulisation(Des);
-							VisualisationLoopRunning = false;
+							cout << "You dont have any humidity readings" << endl;
 						}
 					}
-					else if ((char)toupper(Des) == 'Q')
+					else if ((char)toupper(visualisationRequest) == 'E')
+					{
+						MainStorage.Visulisation(visualisationRequest);
+					}
+					else if ((char)toupper(visualisationRequest) == 'Q')
 					{
 						VisualisationLoopRunning = false;
 					}
@@ -335,14 +347,12 @@ int main()
 			bool SearchIsRunning = true;
 			while (SearchIsRunning == true)
 			{
-				if (MainStorage.SizeOfAirquality() >= 1 || MainStorage.SizeOfTemperature() >= 1)
+				if (MainStorage.SizeOfAirquality() > 0 || MainStorage.SizeOfTemperature() > 0)
 				{
-					cout << "What Sensor do you want a reading from" << endl;
-					cout << "You can search with [N]ames or [T]ime" << endl;
-					cout << "If you dont want to search for anything press [Q]" << endl;
-					char Des;
-					cin >> Des;
-					if ((char)toupper(Des) == 'N')
+					Utility.searchMenu();
+					char searchRequest;
+					cin >> searchRequest;
+					if ((char)toupper(searchRequest) == 'N')
 					{
 						bool SearchNameRunning = true;
 						while (SearchNameRunning == true)
@@ -362,7 +372,7 @@ int main()
 						}
 						SearchIsRunning = false;
 					}
-					else if ((char)toupper(Des) == 'T')
+					else if ((char)toupper(searchRequest) == 'T')
 					{
 						bool SearchTimeRunning = true;
 						while (SearchTimeRunning == true)
@@ -383,7 +393,7 @@ int main()
 						}
 						SearchIsRunning = false;
 					}
-					else if ((char)toupper(Des) == 'Q')
+					else if ((char)toupper(searchRequest) == 'Q')
 					{
 						SearchIsRunning = false;
 					}
@@ -405,13 +415,74 @@ int main()
 		break;
 		case 6:
 		{
+			system("CLS");
+			bool editLoopRunning = true;
+			while (editLoopRunning == true)
+			{
+
+			}
+		}
+		break;
+		case 7:
+		{
+			system("CLS");
+			bool showAlarmLoopRunning = true;
+			while (showAlarmLoopRunning == true)
+			{
+				Utility.showAlarmMenu();
+				char showAlarmChoice;
+				std::cin >> showAlarmChoice;
+				if((char)toupper(showAlarmChoice) == 'Y')
+				{
+					systemController.showAlerts();
+					showAlarmChoice = false;
+				}
+				else if ((char)toupper(showAlarmChoice) == 'N')
+				{
+					showAlarmChoice = false;
+				}
+				else
+				{
+					cout << "Wrong input" << endl;
+				}
+			}
+			Utility.ENTER();
+		}
+		break;
+		case 8:
+		{
+			system("CLS");
+			bool sensorConfigMenu = true;
+			while (sensorConfigMenu == true)
+			{
+				Utility.sensorConfigsMenu();
+				char sensorConfigChoice;
+				std::cin >> sensorConfigChoice;
+				if ((char)toupper(sensorConfigChoice) == 'Y')
+				{
+					systemController.showSensorConfig();
+					sensorConfigMenu = false;
+				}
+				else if ((char)toupper(sensorConfigChoice) == 'N')
+				{
+					sensorConfigMenu = false;
+				}
+				else
+				{
+					cout << "Wrong input" << endl;
+				}
+			}
+		}
+		break;
+		case 9:
+		{
 			Utility.ENTER();
 			MainLoopActive = false;
 		}
 		break;
 		default:
 		{
-			cout << "Wrong input choices are between [1]-[6]" << endl;
+			cout << "Wrong input choices are between [1]-[9]" << endl;
 		}
 		break;
 		}

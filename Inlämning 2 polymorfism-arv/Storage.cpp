@@ -23,9 +23,9 @@ static std::unique_ptr<prompt> makePrompt(SensorType& type)
 {
     switch (type)
     {
-    case SensorType::Airquality: return std::make_unique<airqualityPromts>();
-    case SensorType::Temperature: return std::make_unique<temperaturePromts>();
-    case SensorType::Humidity: return std::make_unique<humidityPromts>();
+    case SensorType::Airquality: return std::make_unique<airqualityPrompts>();
+    case SensorType::Temperature: return std::make_unique<temperaturePrompts>();
+    case SensorType::Humidity: return std::make_unique<humidityPrompts>();
 
     default: return nullptr;
     }

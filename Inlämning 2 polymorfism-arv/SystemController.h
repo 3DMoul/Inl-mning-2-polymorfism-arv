@@ -16,7 +16,7 @@ public:
 	void showAlerts() const;
 	void showSensorConfig();
 	void showStatsFor(std::string sensorName) const;
-	static void saveToFile(const std::string& sensor);
+	static void saveToFile(const Sensor& sensor);
 	void loadFromFile();
 
 private:

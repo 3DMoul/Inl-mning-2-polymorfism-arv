@@ -96,19 +96,15 @@ void SystemController::showStatsFor(std::string sensorName) const
 		}
 	}
 }
-void SystemController::saveToFile(const std::string& sensor)
+void SystemController::saveToFile(const Sensor& sensor)
 {
-    std::ofstream sensorConfig;
-    //här öppnar jag upp en ny txt.fil som jag lägger in värden i
-    sensorConfig.open("SensorConfig.txt", std::ios::app);
+    std::ofstream sensorConfig("SensorConfig.txt", std::ios::app);
     if (sensorConfig.is_open())
     {
-        //här läggs det in i txt.filen
-        sensorConfig << sensor << ",";
+        sensorConfig << sensor.name() << ",";
         sensorConfig << sensor.GetUnitOfMeasurment() << ",";
         sensorConfig << sensor.maxValue() << ",";
         sensorConfig << sensor.minValue() << std::endl;
-        sensorConfig.close();
     }
 }
 void SystemController::loadFromFile()

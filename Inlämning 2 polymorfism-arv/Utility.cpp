@@ -114,15 +114,15 @@ void Utility::sensorConfigsMenu()
     cout << "[Y]es / [N]o" << endl;
     cout << "If you dont want to see alarms press [Q]" << endl;
 }
-string temperaturePromts::SimulatingSensorpromt()const
+string temperaturePrompts::SimulatingSensorprompt()const
 {
     return "How many Temperature readings do you want to simulate?";
 }
-string airqualityPromts::SimulatingSensorpromt()const
+string airqualityPrompts::SimulatingSensorprompt()const
 {
     return "How many Airquality readings do you want to simulate?";
 }
-string humidityPromts::SimulatingSensorpromt()const
+string humidityPrompts::SimulatingSensorprompt()const
 {
     return "How many Humidity readings do you want to simulate?";
 }

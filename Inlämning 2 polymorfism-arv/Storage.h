@@ -7,6 +7,7 @@ class Storage
 {
 public:
 	static std::vector <Measurement> getMeasurments();
+	static std::unique_ptr<Sensor> MakeSensor(SensorType type, const std::string& newname, double min, double max);
 	static int sizeOfTypeSensor(const std::string& unitOfunitOfMeasurement);
 	static int SizeOfList();
 	bool SearchForName(std::string Name);

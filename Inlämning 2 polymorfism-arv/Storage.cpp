@@ -8,7 +8,7 @@
 #include "SystemController.h"
 std::vector <Measurement> Storage::MeasurmentsList;
 // Puts Readings in vector 
-static std::unique_ptr<Sensor> MakeSensor(SensorType& type, const std::string& newname, double min, double max)
+std::unique_ptr<Sensor> Storage::MakeSensor(SensorType type, const std::string& newname, double min, double max)
 {
     switch (type) 
     {
@@ -19,7 +19,7 @@ static std::unique_ptr<Sensor> MakeSensor(SensorType& type, const std::string& n
         default: return nullptr;
     }
 }
-static std::unique_ptr<promt> makePromt(SensorType& type)
+static std::unique_ptr<prompt> makePrompt(SensorType& type)
 {
     switch (type)
     {
@@ -33,13 +33,13 @@ static std::unique_ptr<promt> makePromt(SensorType& type)
 void Storage::GetMeasurementReading(char type)
 {
     SensorType sensorType = static_cast<SensorType>(type);
-    auto sensorPrompt = makePromt(sensorType);
+    auto sensorPrompt = makePrompt(sensorType);
     if (!sensorPrompt)
     {
         std::cerr << "Invalid sensor type!\n";
         return;
     }
-    string strPromt = sensorPrompt->SimulatingSensorpromt();
+    string strPromt = sensorPrompt->SimulatingSensorprompt();
     int amountOfSensors = Utility::NumberChoice(strPromt);//amout of sensors
     for (int i = 0; i < amountOfSensors; i++)
     {
@@ -64,11 +64,9 @@ void Storage::GetMeasurementReading(char type)
         std::cin >> maxValue;
         SensorType typeSens = static_cast<SensorType>(type);
         auto newSensor = MakeSensor(typeSens, newSensorName, minValue, maxValue);
-        SystemController::addSensor(newSensor);
-        SystemController::saveToFile(newSensor);
-        Measurement newMeasurement;
-        SystemController::saveToFile(*newSensor);
         std::cout << " here" << std::endl;
+        SystemController::saveToFile(*newSensor);
+        Measurement newMeasurement;
         newMeasurement.GetReading(*newSensor);
         SystemController::addSensor(std::move(newSensor));
         WriteFile(newMeasurement);

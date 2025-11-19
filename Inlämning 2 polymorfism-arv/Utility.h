@@ -19,20 +19,20 @@ public:
 	void sensorConfigsMenu();
 };
 // here is all the text for all the different options
-struct promt 
+struct prompt 
 {//promt message
-	virtual ~promt() = default;
-	virtual string SimulatingSensorpromt()const = 0;
+	virtual ~prompt() = default;
+	virtual string SimulatingSensorprompt()const = 0;
 };
-struct temperaturePromts : promt
+struct temperaturePrompts : prompt
 {
-	string SimulatingSensorpromt()const override;
+	string SimulatingSensorprompt()const override;
 };
-struct airqualityPromts : promt
+struct airqualityPrompts : prompt
 {
-	string SimulatingSensorpromt()const override;
+	string SimulatingSensorprompt()const override;
 };
-struct humidityPromts : promt
+struct humidityPrompts : prompt
 {
-	string SimulatingSensorpromt()const override;
+	string SimulatingSensorprompt()const override;
 };

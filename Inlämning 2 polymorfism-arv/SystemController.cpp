@@ -2,10 +2,13 @@
 #include <string>
 #include <fstream>
 #include "SystemController.h"
-#include "Storage.cpp"
 #include "ThresHold.h"
+#include "Storage.h"
+#include "Sensor.h"
 std::vector<std::unique_ptr<Sensor>> SystemController::sensors;
-void SystemController::addSensor(std::unique_ptr<Sensor> s) {
+std::vector <Threshold> SystemController::thresholdList;
+void SystemController::addSensor(std::unique_ptr<Sensor> s) 
+{
     sensors.push_back(std::move(s));
 }
 void SystemController::checkAlarm()
@@ -93,7 +96,7 @@ void SystemController::showStatsFor(std::string sensorName) const
 		}
 	}
 }
-void SystemController::saveToFile(std::unique_ptr<Sensor>& sensor)
+void SystemController::saveToFile(const std::string& sensor)
 {
     std::ofstream sensorConfig;
     //här öppnar jag upp en ny txt.fil som jag lägger in värden i
@@ -101,7 +104,7 @@ void SystemController::saveToFile(std::unique_ptr<Sensor>& sensor)
     if (sensorConfig.is_open())
     {
         //här läggs det in i txt.filen
-        sensorConfig << sensor.name() << ",";
+        sensorConfig << sensor << ",";
         sensorConfig << sensor.GetUnitOfMeasurment() << ",";
         sensorConfig << sensor.maxValue() << ",";
         sensorConfig << sensor.minValue() << std::endl;
@@ -143,11 +146,11 @@ void SystemController::loadFromFile()
                 }
                 else if (FileIteration == 2)
                 {
-                    maxValue = stod(FileSegment);
+                    maxValue = std::stod(FileSegment);
                 }
                 else if (FileIteration == 3)
                 {
-                    minValue = stod(FileSegment);
+                    minValue = std::stod(FileSegment);
                 }
                 FileSegment = strtok_s(nullptr, del, &next_token);
                 FileIteration++;
@@ -156,19 +159,19 @@ void SystemController::loadFromFile()
             {
                 SensorType typeSens = static_cast<SensorType>('T');
                 auto newSensor = Storage::MakeSensor(typeSens, name, minValue, maxValue);
-                sensors.push_back(newSensor);
+                sensors.push_back(std::move(newSensor));
             }
             else if (unitOfMeasurment == "%")
             {
                 SensorType typeSens = static_cast<SensorType>('A');
                 auto newSensor = Storage::MakeSensor(typeSens, name, minValue, maxValue);
-                sensors.push_back(newSensor);
+                sensors.push_back(std::move(newSensor));
             }
             else if (unitOfMeasurment == "AH")
             {
                 SensorType typeSens = static_cast<SensorType>('H');
                 auto newSensor = Storage::MakeSensor(typeSens, name, minValue, maxValue);
-                sensors.push_back(newSensor);
+                sensors.push_back(std::move(newSensor));
             }
         }
         SensorConfig.close();

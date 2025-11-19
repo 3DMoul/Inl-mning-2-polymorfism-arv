@@ -2,12 +2,12 @@
 #include <string>
 #include <fstream>
 #include "SystemController.h"
-#include "Storage.cpp"
+#include "Storage.h"
 #include "ThresHold.h"
+#include "Sensor.h"
 std::vector<std::unique_ptr<Sensor>> SystemController::sensors;
-void SystemController::addSensor(std::unique_ptr<Sensor>& s)
-{
-	sensors.push_back(s);
+void SystemController::addSensor(std::unique_ptr<Sensor> s) {
+    sensors.push_back(std::move(s));
 }
 void SystemController::checkAlarm()
 {
@@ -94,7 +94,7 @@ void SystemController::showStatsFor(std::string sensorName) const
 		}
 	}
 }
-void SystemController::saveToFile(std::unique_ptr<Sensor>& sensor) const
+void SystemController::saveToFile(std::unique_ptr<Sensor>& sensor)
 {
     std::ofstream sensorConfig;
     //här öppnar jag upp en ny txt.fil som jag lägger in värden i
@@ -156,19 +156,19 @@ void SystemController::loadFromFile()
             if (unitOfMeasurment == "C")
             {
                 SensorType typeSens = static_cast<SensorType>('T');
-                auto newSensor = MakeSensor(typeSens, name, minValue, maxValue);
+                auto newSensor = Storage::MakeSensor(typeSens, name, minValue, maxValue);
                 sensors.push_back(newSensor);
             }
             else if (unitOfMeasurment == "%")
             {
                 SensorType typeSens = static_cast<SensorType>('A');
-                auto newSensor = MakeSensor(typeSens, name, minValue, maxValue);
+                auto newSensor = Storage::MakeSensor(typeSens, name, minValue, maxValue);
                 sensors.push_back(newSensor);
             }
             else if (unitOfMeasurment == "AH")
             {
                 SensorType typeSens = static_cast<SensorType>('H');
-                auto newSensor = MakeSensor(typeSens, name, minValue, maxValue);
+                auto newSensor = Storage::MakeSensor(typeSens, name, minValue, maxValue);
                 sensors.push_back(newSensor);
             }
         }

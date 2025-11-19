@@ -8,7 +8,7 @@
 #include "SystemController.h"
 std::vector <Measurement> Storage::MeasurmentsList;
 // Puts Readings in vector 
-static std::unique_ptr<Sensor> MakeSensor(SensorType& type, const std::string& newname, double min, double max)
+std::unique_ptr<Sensor> Storage::MakeSensor(SensorType& type, const std::string& newname, double min, double max)
 {
     switch (type) 
     {
@@ -64,8 +64,8 @@ void Storage::GetMeasurementReading(char type)
         std::cin >> maxValue;
         SensorType typeSens = static_cast<SensorType>(type);
         auto newSensor = MakeSensor(typeSens, newSensorName, minValue, maxValue);
-        SystemController sensorFile;
-        sensorFile.saveToFile(newSensor);
+        SystemController::addSensor(newSensor);
+        SystemController::saveToFile(newSensor);
         Measurement newMeasurement;
         newMeasurement.GetReading(newSensor);
         WriteFile(newMeasurement);

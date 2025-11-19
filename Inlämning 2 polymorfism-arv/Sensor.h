@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+
 enum class SensorType { Airquality = 'A', Temperature = 'T', Humidity = 'H' };
 
 class Sensor

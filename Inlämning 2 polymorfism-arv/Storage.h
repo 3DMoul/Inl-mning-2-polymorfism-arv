@@ -6,6 +6,7 @@
 class Storage
 {
 public:
+	static std::unique_ptr<Sensor> MakeSensor(SensorType& type, const std::string& newname, double min, double max);
 	static std::vector <Measurement> getMeasurments();
 	static int SizeOfAirquality();
 	static int SizeOfTemperature();

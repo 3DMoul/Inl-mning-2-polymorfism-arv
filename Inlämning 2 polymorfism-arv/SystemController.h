@@ -7,14 +7,14 @@
 class SystemController 
 {
 public:
-	void addSensor(std::unique_ptr<Sensor>& s);
+	static void addSensor(std::unique_ptr<Sensor> s);
 	void checkAlarm();
 	int getAlarmCount() const;
 	static void configureThreshold(const std::string& name);
 	void showAlerts() const;
 	void showSensorConfig();
 	void showStatsFor(std::string sensorName) const;
-	void saveToFile(std::unique_ptr<Sensor>& sensor) const;
+	static void saveToFile(std::unique_ptr<Sensor>& sensor);
 	void loadFromFile();
 
 private:

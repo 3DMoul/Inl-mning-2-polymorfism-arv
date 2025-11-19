@@ -10,14 +10,14 @@ int main()
 {
 	Utility Utility;
 	Storage MainStorage;
-	SystemController systemController;
+	SystemController Controller;
 	MainStorage.ReadFile();
-	systemController.loadFromFile();
+	Controller.loadFromFile();
 	bool MainLoopActive = true;
 	while (MainLoopActive == true)
 	{
-		systemController.checkAlarm();
-		int alarmCounts = systemController.getAlarmCount();
+		Controller.checkAlarm();
+		int alarmCounts = Controller.getAlarmCount();
 		std::cout << "The amount of alarms active is: " << alarmCounts << std::endl;
 		Utility.PrintMenu();
 		string NumberChoice = "Choice between [1]-[9]";
@@ -426,6 +426,11 @@ int main()
 			bool editLoopRunning = true;
 			while (editLoopRunning == true)
 			{
+				Utility.editMenu();
+				std::string thresHoldName;
+				std::cin >> thresHoldName;
+				Controller.editThresHold(thresHoldName);
+
 				editLoopRunning = false;
 			}
 		}
@@ -441,7 +446,7 @@ int main()
 				std::cin >> showAlarmChoice;
 				if((char)toupper(showAlarmChoice) == 'Y')
 				{
-					systemController.showAlerts();
+					Controller.showAlerts();
 					showAlarmChoice = false;
 				}
 				else if ((char)toupper(showAlarmChoice) == 'N')
@@ -467,7 +472,7 @@ int main()
 				std::cin >> sensorConfigChoice;
 				if ((char)toupper(sensorConfigChoice) == 'Y')
 				{
-					systemController.showSensorConfig();
+					Controller.showSensorConfig();
 					sensorConfigMenu = false;
 				}
 				else if ((char)toupper(sensorConfigChoice) == 'N')

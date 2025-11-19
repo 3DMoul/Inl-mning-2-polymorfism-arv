@@ -18,7 +18,7 @@ public:
 	void showStatsFor(std::string sensorName) const;
 	static void saveToFile(const Sensor& sensor);
 	void loadFromFile();
-
+	void editThresHold(const std::string& thresholdName);
 private:
 	int alarmCount = 0;
 };

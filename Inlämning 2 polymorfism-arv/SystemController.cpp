@@ -173,3 +173,16 @@ void SystemController::loadFromFile()
         SensorConfig.close();
     }
 }
+void SystemController::editThresHold(const std::string& thresholdName)
+{
+    for (auto currentThreshold : thresholdList)
+    {
+        if (currentThreshold.SensorNamn == thresholdName)
+        {
+            std::cout << "The current threshold for " << currentThreshold.SensorNamn << "is " << currentThreshold.Limit << std::endl;
+            std::cout << "´What do you want to change the threshold to: ";
+            std::cin >> currentThreshold.Limit;
+            return;
+        }
+    }
+}

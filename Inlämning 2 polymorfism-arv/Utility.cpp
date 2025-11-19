@@ -101,7 +101,11 @@ void Utility::searchMenu()
     cout << "You can search with [N]ames or [T]ime" << endl;
     cout << "If you dont want to search for anything press [Q]" << endl;
 }
-
+void Utility::editMenu()
+{
+    std::cout << "what threshold do you want to edit type the name: " << std::endl;
+    cout << "If you dont want to simulate anything press [Q]" << endl;
+}
 void Utility::showAlarmMenu()
 {
     cout << "Do you want to see all the alarms" << endl;

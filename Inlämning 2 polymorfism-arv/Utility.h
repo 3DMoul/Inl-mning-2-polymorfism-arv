@@ -15,6 +15,7 @@ public:
 	void StatisticMenu();
 	void visualRepMenu();
 	void searchMenu();
+	void editMenu();
 	void showAlarmMenu();
 	void sensorConfigsMenu();
 };

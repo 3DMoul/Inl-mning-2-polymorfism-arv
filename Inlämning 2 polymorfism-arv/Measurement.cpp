@@ -2,11 +2,11 @@
 #include "Sensor.h"
 #include <iostream>
 
-void Measurement::GetReading(unique_ptr<Sensor>& NewSensor)
+void Measurement::GetReading(const Sensor& NewSensor)
 {
-	SensorName = NewSensor->name();
-	SensorMeasurement = NewSensor->Read();
-	UnitOfMeasurment = NewSensor->GetUnitOfMeasurment();
+	SensorName = NewSensor.name();
+	SensorMeasurement = NewSensor.Read();
+	UnitOfMeasurment = NewSensor.GetUnitOfMeasurment();
 	TimeStamp = Utility::TimeGenerator();
 }
 void Measurement::PrintMeasurement()const

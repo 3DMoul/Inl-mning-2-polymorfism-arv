@@ -73,18 +73,18 @@ void Utility::Simulationmenu()
 }
 void Utility::PrintReadingMenu()
 {
-    cout << "You have [" << Storage::SizeOfAirquality() << "]" << " Airquality readings" << endl;
-    cout << "You have [" << Storage::SizeOfTemperature() << "]" << " Temperature readings" << endl;
-    cout << "You have [" << Storage::sizeOfHumidity() << "]" << " Humidity readings" << endl;
+    cout << "You have [" << Storage::sizeOfTypeSensor("%") << "]" << " Airquality readings" << endl;
+    cout << "You have [" << Storage::sizeOfTypeSensor("C") << "]" << " Temperature readings" << endl;
+    cout << "You have [" << Storage::sizeOfTypeSensor("AH") << "]" << " Humidity readings" << endl;
     cout << "Do you want to print sensor readings" << endl;
     cout << "[T] emperature / [A]irquality / [H]umidity / [E]very sensor type" << endl;
     cout << "If you dont want to print anything press [Q]" << endl;
 }
 void Utility::StatisticMenu()
 {
-    cout << "You have [" << Storage::SizeOfAirquality() << "] Airquality readings" << endl;
-    cout << "You have [" << Storage::SizeOfTemperature() << "] Temperature readings" << endl;
-    cout << "You have [" << Storage::sizeOfHumidity() << "] Humidity readings" << endl;
+    cout << "You have [" << Storage::sizeOfTypeSensor("%") << "] Airquality readings" << endl;
+    cout << "You have [" << Storage::sizeOfTypeSensor("C") << "] Temperature readings" << endl;
+    cout << "You have [" << Storage::sizeOfTypeSensor("AH") << "] Humidity readings" << endl;
     cout << "What do you want statistics of" << endl;
     cout << "[T] emperature / [A]irquality / [H]umidity / [E]very sensor type" << endl;
     cout << "If you dont want statistics of anything press [Q]" << endl;

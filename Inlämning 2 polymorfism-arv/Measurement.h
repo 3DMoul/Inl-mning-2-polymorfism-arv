@@ -10,6 +10,6 @@ public:
 	double SensorMeasurement;
 	std::string UnitOfMeasurment;
 	std::string TimeStamp;
-	void GetReading(unique_ptr<Sensor>& NewSensor);
+	void GetReading(const Sensor& NewSensor);
 	void PrintMeasurement()const;
 };

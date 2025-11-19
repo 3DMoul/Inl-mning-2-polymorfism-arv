@@ -7,29 +7,18 @@ class Storage
 {
 public:
 	static std::vector <Measurement> getMeasurments();
-	static int SizeOfAirquality();
-	static int SizeOfTemperature();
-	static int sizeOfHumidity();
+	static int sizeOfTypeSensor(const std::string& unitOfunitOfMeasurement);
 	static int SizeOfList();
 	bool SearchForName(std::string Name);
 	bool SearchForTimeStamp(std::string Name);
 	static void GetMeasurementReading(char type);
-	static void PrintTemperatureReadings();
-	static void PrintAirqualityReadings();
-	static void printHymidityReadings();
-	static void PrintAll();
+	static void printByTypeSensor(const std::string& unitOfMeasurement, const std::string& type);
 	static void WriteFile(Measurement& NewMeasurementReadings);
 	static void ReadFile();
-	static void Visulisation(const char IN);
-	double SumOfTemperature();
-	double SumOfAirquality();
-	double sumOfHumidity();
-	static double TemperatureVariance(double SumOfTemp);
-	static double AirqualityVariance(double SumOfAirqual);
-	static double humidityVariance(double sumOfHumidity);
-	static void MinMaxTemperature();
-	static void MinMaxAirquality();
-	static void minMaxHumidity();
+	static void VisulisationOfTypeSensor(const std::string& unitOfMeasurement);
+	double sumOfTypeSensor(const std::string& unitOfMeasurement);
+	static double varianceFromTypeSensor(double& sum, const std::string& unitOfMeasurement);
+	static void minMaxOfTypeSensor(const std::string& unitOfMeasurement);
 private:
 	static std::vector <Measurement> MeasurmentsList;
 };

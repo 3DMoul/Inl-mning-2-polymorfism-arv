@@ -47,7 +47,7 @@ void Storage::GetMeasurementReading(char type)
         std::cout << "What is the name of your sensor: " << std::endl;
         std::string newSensorName;
         std::cin >> newSensorName;
-        SystemController::configureThreshold(newSensorName);
+        SystemController::addThresholdForSensor(newSensorName);
         for (auto& currentName : MeasurmentsList)
         {
             while (currentName.SensorName == newSensorName)
@@ -64,82 +64,26 @@ void Storage::GetMeasurementReading(char type)
         std::cin >> maxValue;
         SensorType typeSens = static_cast<SensorType>(type);
         auto newSensor = MakeSensor(typeSens, newSensorName, minValue, maxValue);
-        SystemController sensorFile;
-        sensorFile.saveToFile(newSensor);
+        SystemController::addSensor(newSensor);
+        SystemController::saveToFile(newSensor);
         Measurement newMeasurement;
-        newMeasurement.GetReading(newSensor);
+        SystemController::saveToFile(*newSensor);
+        std::cout << " here" << std::endl;
+        newMeasurement.GetReading(*newSensor);
+        SystemController::addSensor(std::move(newSensor));
         WriteFile(newMeasurement);
         MeasurmentsList.push_back(newMeasurement);
     }
 }
-
-void Storage::PrintTemperatureReadings()
+void Storage::printByTypeSensor(const std::string& unitOfMeasurement, const std::string& type)
 {
-    if (SizeOfTemperature() > 0)
-    {
-        std::cout << "Temperature: " << endl;
-        for (auto& CurrentSensor : MeasurmentsList)
-        {
-            if (CurrentSensor.UnitOfMeasurment == "C")
-            {
-                std::cout << CurrentSensor.SensorName << "\n" << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << ", " << CurrentSensor.TimeStamp << endl;
-            }
-        }
-    }
-    else
-    {
-        std::cout << "you have no temperature readings" << endl;
-    }
-    
-}
-void Storage::PrintAirqualityReadings()
-{
-    std::cout << "AirQualityReadings: " << endl;
+    std::cout << type << endl;
     for (auto& CurrentSensor : MeasurmentsList)
     {
-        if (CurrentSensor.UnitOfMeasurment == "%")
+        if (CurrentSensor.UnitOfMeasurment == unitOfMeasurement)
         {
             std::cout << CurrentSensor.SensorName << "\n" << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << ", " << CurrentSensor.TimeStamp << endl;
         }
-    }
-}
-void Storage::printHymidityReadings()
-{
-    std::cout << "Humidity: " << endl;
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "AH")
-        {
-            std::cout << CurrentSensor.SensorName << "\n" << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << ", " << CurrentSensor.TimeStamp << endl;
-        }
-    }
-}
-
-void Storage::PrintAll()
-{
-    if(SizeOfTemperature() > 0)
-    {
-        PrintTemperatureReadings();
-    }
-    else
-    {
-        std::cout << "\nYou dont have any temperature readings\n" << endl;
-    }
-    if(SizeOfAirquality() > 0)
-    {
-        PrintAirqualityReadings();
-    }
-    else
-    {
-        std::cout << "\nYou dont have any airquality readings\n" << endl;
-    }
-    if(sizeOfHumidity() > 0)
-    {
-        printHymidityReadings();
-    }
-    else
-    {
-        std::cout << "\nYou dont have any airquality readings\n" << endl;
     }
 }
 //Takes readings and puts them in text file
@@ -205,38 +149,12 @@ void Storage::ReadFile()
     }
 }
 //Goes throu list to see how many of different readings you have from vector
-int Storage::SizeOfAirquality()
+int Storage::sizeOfTypeSensor(const std::string& unitOfunitOfMeasurement)
 {
     int Size = 0;
     for (int i = 0; i < size(MeasurmentsList); i++)
     {
-        if (MeasurmentsList[i].UnitOfMeasurment == "%")
-        {
-            Size++;
-        }
-    }
-
-
-    return Size;
-}
-int Storage::SizeOfTemperature()
-{
-    int Size = 0;
-    for (int i = 0; i < size(MeasurmentsList); i++)
-    {
-        if (MeasurmentsList[i].UnitOfMeasurment == "C")
-        {
-            Size++;
-        }
-    }
-    return Size;
-}
-int Storage::sizeOfHumidity()
-{
-    int Size = 0;
-    for (int i = 0; i < size(MeasurmentsList); i++)
-    {
-        if (MeasurmentsList[i].UnitOfMeasurment == "AH")
+        if (MeasurmentsList[i].UnitOfMeasurment == unitOfunitOfMeasurement)
         {
             Size++;
         }
@@ -282,119 +200,32 @@ bool Storage::SearchForTimeStamp(string TimeStamp)
 
 }
 //Takes value of reading and show it with sequences of "*" symbols
-void Storage::Visulisation(char type)
+void Storage::VisulisationOfTypeSensor(const std::string& unitOfMeasurement)
 {
-    if (type == 'A')
+    // går genom alla vectorer
+    for (auto& CurrentSensor : MeasurmentsList)
     {
-        // går genom alla vectorer
-        for (auto& CurrentSensor : MeasurmentsList)
+        if (CurrentSensor.UnitOfMeasurment == unitOfMeasurement)
         {
-            if (CurrentSensor.UnitOfMeasurment == "%")
+            int temp = round(CurrentSensor.SensorMeasurement);
+            for (int i = 0; i < round(temp / 4); i++) // for loopen printar "*" så att man kan se visualiserat hur tempraturen går ne och up
             {
-                int temp = round(CurrentSensor.SensorMeasurement);
-                for (int i = 0; i < round(temp / 4); i++) // for loopen printar "*" så att man kan se visualiserat hur tempraturen går ne och up
-                {
-                    std::cout << "*";
-                    //andvänder den här för att den inte bara pruntar ut alla "*" på en gång
-                    this_thread::sleep_for(chrono::seconds(1));
-                }
-                std::cout << "   " << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << endl;
-                std::cout << "\n";
+                std::cout << "*";
+                //andvänder den här för att den inte bara pruntar ut alla "*" på en gång
+                this_thread::sleep_for(chrono::seconds(1));
             }
-        }
-    }
-    else if (type == 'T')
-    {
-        for (auto& CurrentSensor : MeasurmentsList)
-        {
-            if (CurrentSensor.UnitOfMeasurment == "C")
-            {
-                int temp = round(CurrentSensor.SensorMeasurement);
-                for (int i = 0; i < round(temp / 2); i++) // for loopen printar "*" så att man kan se visualiserat hur tempraturen går ne och up
-                {
-                    std::cout << "*";
-                    //andvänder den här för att den inte bara pruntar ut alla "*" på en gång
-                    this_thread::sleep_for(chrono::seconds(1));
-                }
-                std::cout << "   " << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << endl;
-                std::cout << "\n";
-            }
-        }
-    }
-    else if (type == 'H')
-    {
-        for (auto& CurrentSensor : MeasurmentsList)
-        {
-            if (CurrentSensor.UnitOfMeasurment == "AH")
-            {
-                int temp = round(CurrentSensor.SensorMeasurement);
-                for (int i = 0; i < round(temp / 2); i++) // for loopen printar "*" så att man kan se visualiserat hur tempraturen går ne och up
-                {
-                    std::cout << "*";
-                    //andvänder den här för att den inte bara pruntar ut alla "*" på en gång
-                    this_thread::sleep_for(chrono::seconds(1));
-                }
-                std::cout << "   " << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << endl;
-                std::cout << "\n";
-            }
-        }
-    }
-    else
-    {
-        for (auto& CurrentSensor : MeasurmentsList)
-        {
-            if (CurrentSensor.UnitOfMeasurment == "%")
-            {
-                int temp = round(CurrentSensor.SensorMeasurement);
-                for (int i = 0; i < round(temp / 4); i++) // for loopen printar "*" så att man kan se visualiserat hur tempraturen går ne och up
-                {
-                    std::cout << "*";
-                    //andvänder den här för att den inte bara pruntar ut alla "*" på en gång
-                    this_thread::sleep_for(chrono::seconds(1));
-                }
-                std::cout << "   " << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << endl;
-                std::cout << "\n";
-            }
-        }
-        for (auto& CurrentSensor : MeasurmentsList)
-        {
-            if (CurrentSensor.UnitOfMeasurment == "C")
-            {
-                int temp = round(CurrentSensor.SensorMeasurement);
-                for (int i = 0; i < round(temp / 2); i++) // for loopen printar "*" så att man kan se visualiserat hur tempraturen går ne och up
-                {
-                    std::cout << "*";
-                    //andvänder den här för att den inte bara pruntar ut alla "*" på en gång
-                    this_thread::sleep_for(chrono::seconds(1));
-                }
-                std::cout << "   " << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << endl;
-                std::cout << "\n";
-            }
-        }
-        for (auto& CurrentSensor : MeasurmentsList)
-        {
-            if (CurrentSensor.UnitOfMeasurment == "AH")
-            {
-                int temp = round(CurrentSensor.SensorMeasurement);
-                for (int i = 0; i < round(temp / 2); i++) // for loopen printar "*" så att man kan se visualiserat hur tempraturen går ne och up
-                {
-                    std::cout << "*";
-                    //andvänder den här för att den inte bara pruntar ut alla "*" på en gång
-                    this_thread::sleep_for(chrono::seconds(1));
-                }
-                std::cout << "   " << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << endl;
-                std::cout << "\n";
-            }
+            std::cout << "   " << CurrentSensor.SensorMeasurement << " " << CurrentSensor.UnitOfMeasurment << endl;
+            std::cout << "\n";
         }
     }
 }
-double Storage::SumOfTemperature()
+double Storage::sumOfTypeSensor(const std::string& unitOfMeasurement)
 {
     double Sum = 0;
 
     for (auto& CurrentSensor : MeasurmentsList)
     {
-        if (CurrentSensor.UnitOfMeasurment == "C")
+        if (CurrentSensor.UnitOfMeasurment == unitOfMeasurement)
         {
             Sum += CurrentSensor.SensorMeasurement;
         }
@@ -402,42 +233,16 @@ double Storage::SumOfTemperature()
 
     return Sum;
 }
-double Storage::SumOfAirquality()
-{
-    double Sum = 0;
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "%")
-        {
-            Sum += CurrentSensor.SensorMeasurement;
-        }
-    }
-    return Sum;
-}
-double Storage::sumOfHumidity()
-{
-    double Sum = 0;
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "AH")
-        {
-            Sum += CurrentSensor.SensorMeasurement;
-        }
-    }
-    return Sum;
-}
-
 //Gives variance of Temperature
-double Storage::TemperatureVariance(double SumOfTemp)
+double Storage::varianceFromTypeSensor(double& sum, const std::string& unitOfMeasurement)
 {
-
     //vector för att hålla värderna för varians
     vector<double> StandardDeviation = {};
-    double StandAvg = SumOfTemp / SizeOfTemperature();
+    double StandAvg = sum / sizeOfTypeSensor(unitOfMeasurement);
     //detta subtraherar alla värderna med medelvärdet
     for (auto& CurrentSensor : MeasurmentsList)
     {
-        if (CurrentSensor.UnitOfMeasurment == "C")
+        if (CurrentSensor.UnitOfMeasurment == unitOfMeasurement)
         {
             double Temp = CurrentSensor.SensorMeasurement;
             double TempVar = Temp - StandAvg;
@@ -459,78 +264,15 @@ double Storage::TemperatureVariance(double SumOfTemp)
     }
     return Squere;
 }
-//Gives variance of Airquality
-double Storage::AirqualityVariance(double SumOfAirqual)
-{
-
-    //vector för att hålla värderna för varians
-    vector<double> StandardDeviation = {};
-    double StandAvg = SumOfAirqual / SizeOfAirquality();
-    //detta subtraherar alla värderna med medelvärdet
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "%")
-        {
-            double Temp = CurrentSensor.SensorMeasurement;
-            double TempVar = Temp - StandAvg;
-            StandardDeviation.push_back(TempVar);
-        }
-    }
-    //detta kvadrerar alla dem subtraherade nummrena
-    for (auto& CurrentValue : StandardDeviation)
-    {
-        double TempVar = pow(CurrentValue, 2);
-        CurrentValue = TempVar;
-    }
-    // deklarering a kvadrerade tal
-    double Squere = 0;
-    //loop för att addera ihop all Kvad tal
-    for (double i : StandardDeviation)
-    {
-        Squere = Squere + i;
-    }
-    std::cout << Squere;
-    return Squere;
-}
-double Storage::humidityVariance(double sumOfAirqual)
-{
-
-    //vector för att hålla värderna för varians
-    vector<double> StandardDeviation = {};
-    double StandAvg = sumOfAirqual / sizeOfHumidity();
-    //detta subtraherar alla värderna med medelvärdet
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "AH")
-        {
-            double Temp = CurrentSensor.SensorMeasurement;
-            double TempVar = Temp - StandAvg;
-            StandardDeviation.push_back(TempVar);
-        }
-    }
-    //detta kvadrerar alla dem subtraherade nummrena
-    for (auto& CurrentValue : StandardDeviation)
-    {
-        double TempVar = pow(CurrentValue, 2);
-        CurrentValue = TempVar;
-    }
-    // deklarering a kvadrerade tal
-    double Squere = 0;
-    //loop för att addera ihop all Kvad tal
-    for (double i : StandardDeviation)
-    {
-        Squere = Squere + i;
-    }
-    std::cout << Squere;
-    return Squere;
-}
-void Storage::MinMaxTemperature()
+void Storage::minMaxOfTypeSensor(const std::string& unitOfMeasurement)
 {
     Measurement MaxReading;
+    Measurement MinReading;
     double MaxTemp = MeasurmentsList[0].SensorMeasurement;
+    double MinTemp = MeasurmentsList[0].SensorMeasurement;
     for (auto& CurrentSensor : MeasurmentsList)
     {
-        if (CurrentSensor.UnitOfMeasurment == "C")
+        if (CurrentSensor.UnitOfMeasurment == unitOfMeasurement)
         {
             if (MaxTemp < CurrentSensor.SensorMeasurement)
             {
@@ -540,97 +282,7 @@ void Storage::MinMaxTemperature()
                 MaxReading.SensorName = CurrentSensor.SensorName;
                 MaxReading.UnitOfMeasurment = CurrentSensor.UnitOfMeasurment;
             }
-        }
-    }
-    Measurement MinReading;
-    double MinTemp = MeasurmentsList[0].SensorMeasurement;
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "C")
-        {
-            if (MinTemp > CurrentSensor.SensorMeasurement)
-            {
-                MinTemp = CurrentSensor.SensorMeasurement;
-                MinReading.SensorMeasurement = CurrentSensor.SensorMeasurement;
-                MinReading.TimeStamp = CurrentSensor.TimeStamp;
-                MinReading.SensorName = CurrentSensor.SensorName;
-                MinReading.UnitOfMeasurment = CurrentSensor.UnitOfMeasurment;
-            }
-        }
-    }
-    std::cout << "--------------------------------" << endl;
-    std::cout << "Max Reading is" << endl;
-    MaxReading.PrintMeasurement();
-    std::cout << "Minx Reading is" << endl;
-    MinReading.PrintMeasurement();
-    std::cout << "--------------------------------" << endl;
-}
-void Storage::MinMaxAirquality()
-{
-    Measurement MaxReading;
-    double MaxAirqual = MeasurmentsList[0].SensorMeasurement;
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "%")
-        {
-            if (MaxAirqual < CurrentSensor.SensorMeasurement)
-            {
-                MaxAirqual = CurrentSensor.SensorMeasurement;
-                MaxReading.SensorMeasurement = CurrentSensor.SensorMeasurement;
-                MaxReading.TimeStamp = CurrentSensor.TimeStamp;
-                MaxReading.SensorName = CurrentSensor.SensorName;
-                MaxReading.UnitOfMeasurment = CurrentSensor.UnitOfMeasurment;
-            }
-        }
-    }
-    Measurement MinReading;
-    double MinAirqual = MeasurmentsList[0].SensorMeasurement;
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "%")
-        {
-            if (MinAirqual > CurrentSensor.SensorMeasurement)
-            {
-                MinAirqual = CurrentSensor.SensorMeasurement;
-                MinReading.SensorMeasurement = CurrentSensor.SensorMeasurement;
-                MinReading.TimeStamp = CurrentSensor.TimeStamp;
-                MinReading.SensorName = CurrentSensor.SensorName;
-                MinReading.UnitOfMeasurment = CurrentSensor.UnitOfMeasurment;
-            }
-        }
-    }
-    std::cout << "--------------------------------" << endl;
-    std::cout << "Max Reading is" << endl;
-    MaxReading.PrintMeasurement();
-    std::cout << "Minx Reading is" << endl;
-    MinReading.PrintMeasurement();
-    std::cout << "--------------------------------" << endl;
-}
-void Storage::minMaxHumidity()
-{
-    Measurement MaxReading;
-    double MaxTemp = MeasurmentsList[0].SensorMeasurement;
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "AH")
-        {
-            if (MaxTemp < CurrentSensor.SensorMeasurement)
-            {
-                MaxTemp = CurrentSensor.SensorMeasurement;
-                MaxReading.SensorMeasurement = CurrentSensor.SensorMeasurement;
-                MaxReading.TimeStamp = CurrentSensor.TimeStamp;
-                MaxReading.SensorName = CurrentSensor.SensorName;
-                MaxReading.UnitOfMeasurment = CurrentSensor.UnitOfMeasurment;
-            }
-        }
-    }
-    Measurement MinReading;
-    double MinTemp = MeasurmentsList[0].SensorMeasurement;
-    for (auto& CurrentSensor : MeasurmentsList)
-    {
-        if (CurrentSensor.UnitOfMeasurment == "AH")
-        {
-            if (MinTemp > CurrentSensor.SensorMeasurement)
+            else if (MinTemp > CurrentSensor.SensorMeasurement)
             {
                 MinTemp = CurrentSensor.SensorMeasurement;
                 MinReading.SensorMeasurement = CurrentSensor.SensorMeasurement;

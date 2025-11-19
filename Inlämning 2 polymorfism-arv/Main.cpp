@@ -74,7 +74,7 @@ int main()
 			bool PrintLoopisRunning = true;
 			while (PrintLoopisRunning == true)
 			{
-				if (MainStorage.SizeOfAirquality() > 0 || MainStorage.SizeOfTemperature() > 0 || MainStorage.sizeOfHumidity() > 0)
+				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
 
 					Utility.PrintReadingMenu();
@@ -83,9 +83,9 @@ int main()
 					//använder toupper så man kan skriva bådde stor eller liten bokstav
 					if ((char)toupper(printRequest) == 'T')
 					{
-						if (MainStorage.SizeOfTemperature() > 0)
+						if (MainStorage.sizeOfTypeSensor("C") > 0)
 						{
-							MainStorage.PrintTemperatureReadings();
+							MainStorage.printByTypeSensor("C", "Temperature");
 							PrintLoopisRunning = false;
 						}
 						else
@@ -95,9 +95,9 @@ int main()
 					}
 					else if ((char)toupper(printRequest) == 'A')
 					{
-						if (MainStorage.SizeOfAirquality() > 0)
+						if (MainStorage.sizeOfTypeSensor("%") > 0)
 						{
-							MainStorage.PrintAirqualityReadings();
+							MainStorage.printByTypeSensor("%", "Air quality");
 							PrintLoopisRunning = false;
 						}
 						else
@@ -107,9 +107,9 @@ int main()
 					}
 					else if ((char)toupper(printRequest) == 'H')
 					{
-						if (MainStorage.sizeOfHumidity() > 0)
+						if (MainStorage.sizeOfTypeSensor("AH") > 0)
 						{
-							MainStorage.printHymidityReadings();
+							MainStorage.printByTypeSensor("AH", "Humidity");
 							PrintLoopisRunning = false;
 						}
 						else
@@ -119,11 +119,12 @@ int main()
 					}
 					else if ((char)toupper(printRequest) == 'E')
 					{
-							MainStorage.PrintAll();
+						MainStorage.printByTypeSensor("C", "Temperature");
+						MainStorage.printByTypeSensor("%", "Air quality");
+						MainStorage.printByTypeSensor("AH", "Humidity");
 					}
 					else if ((char)toupper(printRequest) == 'Q')
 					{
-						Utility.ENTER();
 						PrintLoopisRunning = false;
 					}
 					else
@@ -146,22 +147,22 @@ int main()
 			bool StatisticsLoopRunning = true;
 			while (StatisticsLoopRunning == true)
 			{
-				if (MainStorage.SizeOfAirquality() > 0 || MainStorage.SizeOfTemperature() > 0 || MainStorage.sizeOfHumidity() > 0)
+				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
 					Utility.StatisticMenu();
 					char sensorStat;
 					cin >> sensorStat;
 					if ((char)toupper(sensorStat) == 'T')
 					{
-						if (MainStorage.SizeOfTemperature() > 0)
+						if (MainStorage.sizeOfTypeSensor("C") > 0)
 						{
-							double SumOfTemp = MainStorage.SumOfTemperature();
+							double SumOfTemp = MainStorage.sumOfTypeSensor("C");
 							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
-							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << "C" << endl;
-							MainStorage.MinMaxTemperature();
-							double VarianceTemperature = MainStorage.TemperatureVariance(SumOfTemp);
-							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << "C" << std::endl;
-							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << "C" << std::endl;
+							cout << "and the avarage is: " << SumOfTemp / MainStorage.sizeOfTypeSensor("C") << "C" << endl;
+							MainStorage.minMaxOfTypeSensor("C");
+							double VarianceTemperature = MainStorage.varianceFromTypeSensor(SumOfTemp, "C");
+							cout << "The sample varians is " << VarianceTemperature / (MainStorage.sizeOfTypeSensor("C") - 1) << "C" << std::endl;
+							cout << "The population varians is " << VarianceTemperature / MainStorage.sizeOfTypeSensor("C") << "C" << std::endl;
 						}
 						else
 						{
@@ -170,15 +171,15 @@ int main()
 					}
 					else if ((char)toupper(sensorStat) == 'A')
 					{
-						if (MainStorage.SizeOfAirquality() > 0)
+						if (MainStorage.sizeOfTypeSensor("%") > 0)
 						{
-							double SumOfAirqual = MainStorage.SumOfAirquality();
+							double SumOfAirqual = MainStorage.sumOfTypeSensor("%");
 							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
-							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
-							MainStorage.MinMaxAirquality();
-							double VarianceAirqual = MainStorage.AirqualityVariance(SumOfAirqual);
-							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << "%" << endl;
-							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
+							cout << "and the avarage is: " << SumOfAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << endl;
+							MainStorage.minMaxOfTypeSensor("%");
+							double VarianceAirqual = MainStorage.varianceFromTypeSensor(SumOfAirqual, "%");
+							cout << "The sample varians is " << VarianceAirqual / (MainStorage.sizeOfTypeSensor("%") - 1) << "%" << endl;
+							cout << "The population varians is " << VarianceAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << endl;
 						}
 						else
 						{
@@ -187,15 +188,15 @@ int main()
 					}
 					else if ((char)toupper(sensorStat) == 'H')
 					{
-						if (MainStorage.sizeOfHumidity() > 0)
+						if (MainStorage.sizeOfTypeSensor("AH") > 0)
 						{
-							double sumOfHumidity = MainStorage.sumOfHumidity();
+							double sumOfHumidity = MainStorage.sumOfTypeSensor("AH");
 							cout << "The sum of all humidity readings is: " << sumOfHumidity << "AH" << endl;
-							cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfHumidity() << "AH" << endl;
-							MainStorage.MinMaxAirquality();
-							double varianceHumidity = MainStorage.humidityVariance(sumOfHumidity);
-							cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfHumidity() - 1) << "AH" << endl;
-							cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfHumidity() << "AH" << endl;
+							cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << endl;
+							MainStorage.minMaxOfTypeSensor("AH");
+							double varianceHumidity = MainStorage.varianceFromTypeSensor(sumOfHumidity, "AH");
+							cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfTypeSensor("AH") - 1) << "AH" << endl;
+							cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << endl;
 						}
 						else
 						{
@@ -204,43 +205,43 @@ int main()
 					}
 					else if ((char)toupper(sensorStat) == 'E')
 					{
-						if (MainStorage.SizeOfTemperature() > 0)
+						if (MainStorage.sizeOfTypeSensor("C") > 0)
 						{
-							double SumOfTemp = MainStorage.SumOfTemperature();
+							double SumOfTemp = MainStorage.sumOfTypeSensor("C");
 							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
-							cout << "and the avarage is: " << SumOfTemp / MainStorage.SizeOfTemperature() << "C" << endl;
-							MainStorage.MinMaxTemperature();
-							double VarianceTemperature = MainStorage.TemperatureVariance(SumOfTemp);
-							cout << "The sample varians is " << VarianceTemperature / (MainStorage.SizeOfTemperature() - 1) << "C" << std::endl;
-							cout << "The population varians is " << VarianceTemperature / MainStorage.SizeOfTemperature() << "C" << std::endl;
+							cout << "and the avarage is: " << SumOfTemp / MainStorage.sizeOfTypeSensor("C") << "C" << endl;
+							MainStorage.minMaxOfTypeSensor("C");
+							double VarianceTemperature = MainStorage.varianceFromTypeSensor(SumOfTemp, "C");
+							cout << "The sample varians is " << VarianceTemperature / (MainStorage.sizeOfTypeSensor("C") - 1) << "C" << std::endl;
+							cout << "The population varians is " << VarianceTemperature / MainStorage.sizeOfTypeSensor("C") << "C" << std::endl;
 						}
 						else
 						{
 							cout << "You dont have any temperature readings" << endl;
 						}
-						if (MainStorage.SizeOfAirquality() > 0)
+						if (MainStorage.sizeOfTypeSensor("%") > 0)
 						{
-							double SumOfAirqual = MainStorage.SumOfAirquality();
+							double SumOfAirqual = MainStorage.sumOfTypeSensor("%");
 							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
-							cout << "and the avarage is: " << SumOfAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
-							MainStorage.MinMaxAirquality();
-							double VarianceAirqual = MainStorage.AirqualityVariance(SumOfAirqual);
-							cout << "The sample varians is " << VarianceAirqual / (MainStorage.SizeOfAirquality() - 1) << "%" << endl;
-							cout << "The population varians is " << VarianceAirqual / MainStorage.SizeOfAirquality() << "%" << endl;
+							cout << "and the avarage is: " << SumOfAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << endl;
+							MainStorage.minMaxOfTypeSensor("%");
+							double VarianceAirqual = MainStorage.varianceFromTypeSensor(SumOfAirqual, "%");
+							cout << "The sample varians is " << VarianceAirqual / (MainStorage.sizeOfTypeSensor("%") - 1) << "%" << endl;
+							cout << "The population varians is " << VarianceAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << endl;
 						}
 						else
 						{
 							cout << "You dont have any airquality readings" << endl;
 						}
-						if (MainStorage.sizeOfHumidity() > 0)
+						if (MainStorage.sizeOfTypeSensor("AH") > 0)
 						{
-							double sumOfHumidity = MainStorage.sumOfHumidity();
+							double sumOfHumidity = MainStorage.sumOfTypeSensor("AH");
 							cout << "The sum of all humidity readings is: " << sumOfHumidity << "AH" << endl;
-							cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfHumidity() << "AH" << endl;
-							MainStorage.MinMaxAirquality();
-							double varianceHumidity = MainStorage.humidityVariance(sumOfHumidity);
-							cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfHumidity() - 1) << "AH" << endl;
-							cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfHumidity() << "AH" << endl;
+							cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << endl;
+							MainStorage.minMaxOfTypeSensor("AH");
+							double varianceHumidity = MainStorage.varianceFromTypeSensor(sumOfHumidity, "AH");
+							cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfTypeSensor("AH") - 1) << "AH" << endl;
+							cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << endl;
 						}
 						else
 						{
@@ -272,7 +273,7 @@ int main()
 			while (VisualisationLoopRunning == true)
 			{
 
-				if (MainStorage.SizeOfAirquality() > 0 || MainStorage.SizeOfTemperature() > 0 || MainStorage.sizeOfHumidity() > 0)
+				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
 					Utility.visualRepMenu();
 					char visualisationRequest;
@@ -280,10 +281,10 @@ int main()
 					//använder toupper så man kan skriva bådde stor eller liten bokstav
 					if ((char)toupper(visualisationRequest) == 'T')
 					{
-						if (MainStorage.SizeOfTemperature() > 0)
+						if (MainStorage.sizeOfTypeSensor("C") > 0)
 						{
 							//detta går igenom Measurementlistan och vissar '*' i olicka mängder beroende på reading valuen
-							MainStorage.Visulisation(visualisationRequest);
+							MainStorage.VisulisationOfTypeSensor("C");
 							Utility.ENTER();
 							VisualisationLoopRunning = false;
 						}
@@ -294,9 +295,9 @@ int main()
 					}
 					else if ((char)toupper(visualisationRequest) == 'A')
 					{
-						if (MainStorage.SizeOfAirquality() > 0)
+						if (MainStorage.sizeOfTypeSensor("%") > 0)
 						{
-							MainStorage.Visulisation(visualisationRequest);
+							MainStorage.VisulisationOfTypeSensor("%");
 							Utility.ENTER();
 							VisualisationLoopRunning = false;
 						}
@@ -307,9 +308,9 @@ int main()
 					}
 					else if ((char)toupper(visualisationRequest) == 'H')
 					{
-						if (MainStorage.sizeOfHumidity() > 0)
+						if (MainStorage.sizeOfTypeSensor("AH") > 0)
 						{
-							MainStorage.Visulisation(visualisationRequest);
+							MainStorage.VisulisationOfTypeSensor("AH");
 							Utility.ENTER();
 							VisualisationLoopRunning = false;
 						}
@@ -320,7 +321,9 @@ int main()
 					}
 					else if ((char)toupper(visualisationRequest) == 'E')
 					{
-						MainStorage.Visulisation(visualisationRequest);
+						MainStorage.VisulisationOfTypeSensor("C");
+						MainStorage.VisulisationOfTypeSensor("%");
+						MainStorage.VisulisationOfTypeSensor("AH");
 					}
 					else if ((char)toupper(visualisationRequest) == 'Q')
 					{
@@ -347,7 +350,7 @@ int main()
 			bool SearchIsRunning = true;
 			while (SearchIsRunning == true)
 			{
-				if (MainStorage.SizeOfAirquality() > 0 || MainStorage.SizeOfTemperature() > 0)
+				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
 					Utility.searchMenu();
 					char searchRequest;
@@ -363,7 +366,9 @@ int main()
 							cin >> SearchName;
 							if ((char)toupper(SearchName) == 'P')
 							{
-								MainStorage.PrintAll();
+								MainStorage.printByTypeSensor("C", "Temperature");
+								MainStorage.printByTypeSensor("%", "Air quality");
+								MainStorage.printByTypeSensor("AH", "Humidity");
 							}
 							else
 							{
@@ -384,7 +389,9 @@ int main()
 							cin >> SearchTimeStamp;
 							if ((char)toupper(SearchTimeStamp) == 'P')
 							{
-								MainStorage.PrintAll();
+								MainStorage.printByTypeSensor("C", "Temperature");
+								MainStorage.printByTypeSensor("%", "Air quality");
+								MainStorage.printByTypeSensor("AH", "Humidity");
 							}
 							else
 							{
@@ -419,7 +426,7 @@ int main()
 			bool editLoopRunning = true;
 			while (editLoopRunning == true)
 			{
-
+				editLoopRunning = false;
 			}
 		}
 		break;

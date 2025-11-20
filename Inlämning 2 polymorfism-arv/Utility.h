@@ -4,11 +4,17 @@ using namespace std;
 class Utility
 {
 public:
+	//detta skapar random value med decimaler
 	static double randomMaxMinDecimal(double Min, double Max);
+	//detta skapar en random int value
 	static int randomMaxMin(int Max, int Min);
+	//detta gör att man inte av mistaf ger en int en string value vilket kommer krasha programet
 	static int numberInputSafeGaurd(const string StringInput);
+	//detta får fram Timestamp
 	static string TimeGenerator();
+	//detta gör att man ska klicka enter om man vill fortsätta så att man kan se värdet på det man kolla på innnan det försviner
 	void ENTER();
+	//detta är bara en bunt av menyer till varje menu val
 	void printMenu(int alarmcount);
 	void simulationmenu();
 	void printReadingMenu();

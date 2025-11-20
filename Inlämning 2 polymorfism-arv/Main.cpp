@@ -5,7 +5,6 @@
 #include "Utility.h"
 #include "Sensor.h"
 #include "SensorType.h"
-using namespace std;
 int main()
 {
 	Utility Utility;
@@ -32,7 +31,7 @@ int main()
 				Utility.simulationmenu();
 				char typeChoice;
 				cin >> typeChoice;
-				//använder toupper så man kan skriva bådde stor eller liten bokstav
+				//testa static_cast<char>(std::toupper(typeChoice)) så det inte spelar rol om man skrev liten eller stor bokstav
 				if (static_cast<char>(std::toupper(typeChoice)) == 'T')
 				{
 					MainStorage.getMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
@@ -61,7 +60,7 @@ int main()
 				}
 				else
 				{
-					cout << "Wrong input" << endl;
+					std::cout << "Wrong input" << endl;
 				}
 			}
 			Utility.ENTER();
@@ -73,6 +72,7 @@ int main()
 			bool PrintLoopisRunning = true;
 			while (PrintLoopisRunning == true)
 			{
+				//kollar om man har några värden att kolla på
 				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
 
@@ -89,7 +89,7 @@ int main()
 						}
 						else
 						{
-							cout << "you have no temperature readings" << endl;
+							std::cout << "you have no temperature readings" << endl;
 						}
 					}
 					else if ((char)toupper(printRequest) == 'A')
@@ -101,7 +101,7 @@ int main()
 						}
 						else
 						{
-							cout << "you have no airquality readings" << endl;
+							std::cout << "you have no airquality readings" << endl;
 						}
 					}
 					else if ((char)toupper(printRequest) == 'H')
@@ -113,7 +113,7 @@ int main()
 						}
 						else
 						{
-							cout << "you have no humidity readings" << endl;
+							std::cout << "you have no humidity readings" << endl;
 						}
 					}
 					else if ((char)toupper(printRequest) == 'E')
@@ -128,12 +128,12 @@ int main()
 					}
 					else
 					{
-						cout << "Wrong input" << endl;
+						std::cout << "Wrong input" << endl;
 					}
 				}
 				else
 				{
-					cout << "you dont have anything to print" << endl;
+					std::cout << "you dont have anything to print" << endl;
 					PrintLoopisRunning = false;
 				}
 				Utility.ENTER();
@@ -146,6 +146,7 @@ int main()
 			bool StatisticsLoopRunning = true;
 			while (StatisticsLoopRunning == true)
 			{
+				//kollar om man har några värden att kolla på
 				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
 					Utility.statisticMenu();
@@ -156,16 +157,16 @@ int main()
 						if (MainStorage.sizeOfTypeSensor("C") > 0)
 						{
 							double SumOfTemp = MainStorage.sumOfTypeSensor("C");
-							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
-							cout << "and the avarage is: " << SumOfTemp / MainStorage.sizeOfTypeSensor("C") << "C" << endl;
+							std::cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << std::endl;
+							std::cout << "and the avarage is: " << SumOfTemp / MainStorage.sizeOfTypeSensor("C") << "C" << std::endl;
 							MainStorage.minMaxOfTypeSensor("C");
 							double VarianceTemperature = MainStorage.varianceFromTypeSensor(SumOfTemp, "C");
-							cout << "The sample varians is " << VarianceTemperature / (MainStorage.sizeOfTypeSensor("C") - 1) << "C" << std::endl;
-							cout << "The population varians is " << VarianceTemperature / MainStorage.sizeOfTypeSensor("C") << "C" << std::endl;
+							std::cout << "The sample varians is " << VarianceTemperature / (MainStorage.sizeOfTypeSensor("C") - 1) << "C" << std::endl;
+							std::cout << "The population varians is " << VarianceTemperature / MainStorage.sizeOfTypeSensor("C") << "C" << std::endl;
 						}
 						else
 						{
-							cout << "You dont have any temperature readings" << endl;
+							std::cout << "You dont have any temperature readings" << std::endl;
 						}
 					}
 					else if ((char)toupper(sensorStat) == 'A')
@@ -173,16 +174,16 @@ int main()
 						if (MainStorage.sizeOfTypeSensor("%") > 0)
 						{
 							double SumOfAirqual = MainStorage.sumOfTypeSensor("%");
-							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
-							cout << "and the avarage is: " << SumOfAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << endl;
+							std::cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << std::endl;
+							std::cout << "and the avarage is: " << SumOfAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << std::endl;
 							MainStorage.minMaxOfTypeSensor("%");
 							double VarianceAirqual = MainStorage.varianceFromTypeSensor(SumOfAirqual, "%");
-							cout << "The sample varians is " << VarianceAirqual / (MainStorage.sizeOfTypeSensor("%") - 1) << "%" << endl;
-							cout << "The population varians is " << VarianceAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << endl;
+							std::cout << "The sample varians is " << VarianceAirqual / (MainStorage.sizeOfTypeSensor("%") - 1) << "%" << std::endl;
+							std::cout << "The population varians is " << VarianceAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << std::endl;
 						}
 						else
 						{
-							cout << "You dont have any airquality readings" << endl;
+							std::cout << "You dont have any airquality readings" << endl;
 						}
 					}
 					else if ((char)toupper(sensorStat) == 'H')
@@ -190,16 +191,16 @@ int main()
 						if (MainStorage.sizeOfTypeSensor("AH") > 0)
 						{
 							double sumOfHumidity = MainStorage.sumOfTypeSensor("AH");
-							cout << "The sum of all humidity readings is: " << sumOfHumidity << "AH" << endl;
-							cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << endl;
+							std::cout << "The sum of all humidity readings is: " << sumOfHumidity << "AH" << std::endl;
+							std::cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << std::endl;
 							MainStorage.minMaxOfTypeSensor("AH");
 							double varianceHumidity = MainStorage.varianceFromTypeSensor(sumOfHumidity, "AH");
-							cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfTypeSensor("AH") - 1) << "AH" << endl;
-							cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << endl;
+							std::cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfTypeSensor("AH") - 1) << "AH" << std::endl;
+							std::cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << std::endl;
 						}
 						else
 						{
-							cout << "You dont have any humidity readings" << endl;
+							std::cout << "You dont have any humidity readings" << std::endl;
 						}
 					}
 					else if ((char)toupper(sensorStat) == 'E')
@@ -207,44 +208,44 @@ int main()
 						if (MainStorage.sizeOfTypeSensor("C") > 0)
 						{
 							double SumOfTemp = MainStorage.sumOfTypeSensor("C");
-							cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << endl;
-							cout << "and the avarage is: " << SumOfTemp / MainStorage.sizeOfTypeSensor("C") << "C" << endl;
+							std::cout << "The sum of all Temperature readings is: " << SumOfTemp << "C" << std::endl;
+							std::cout << "and the avarage is: " << SumOfTemp / MainStorage.sizeOfTypeSensor("C") << "C" << std::endl;
 							MainStorage.minMaxOfTypeSensor("C");
 							double VarianceTemperature = MainStorage.varianceFromTypeSensor(SumOfTemp, "C");
-							cout << "The sample varians is " << VarianceTemperature / (MainStorage.sizeOfTypeSensor("C") - 1) << "C" << std::endl;
-							cout << "The population varians is " << VarianceTemperature / MainStorage.sizeOfTypeSensor("C") << "C" << std::endl;
+							std::cout << "The sample varians is " << VarianceTemperature / (MainStorage.sizeOfTypeSensor("C") - 1) << "C" << std::endl;
+							std::cout << "The population varians is " << VarianceTemperature / MainStorage.sizeOfTypeSensor("C") << "C" << std::endl;
 						}
 						else
 						{
-							cout << "You dont have any temperature readings" << endl;
+							std::cout << "You dont have any temperature readings" << std::endl;
 						}
 						if (MainStorage.sizeOfTypeSensor("%") > 0)
 						{
 							double SumOfAirqual = MainStorage.sumOfTypeSensor("%");
-							cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << endl;
-							cout << "and the avarage is: " << SumOfAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << endl;
+							std::cout << "The sum of all airquality readings is: " << SumOfAirqual << "%" << std::endl;
+							std::cout << "and the avarage is: " << SumOfAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << std::endl;
 							MainStorage.minMaxOfTypeSensor("%");
 							double VarianceAirqual = MainStorage.varianceFromTypeSensor(SumOfAirqual, "%");
-							cout << "The sample varians is " << VarianceAirqual / (MainStorage.sizeOfTypeSensor("%") - 1) << "%" << endl;
-							cout << "The population varians is " << VarianceAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << endl;
+							std::cout << "The sample varians is " << VarianceAirqual / (MainStorage.sizeOfTypeSensor("%") - 1) << "%" << std::endl;
+							std::cout << "The population varians is " << VarianceAirqual / MainStorage.sizeOfTypeSensor("%") << "%" << std::endl;
 						}
 						else
 						{
-							cout << "You dont have any airquality readings" << endl;
+							std::cout << "You dont have any airquality readings" << std::endl;
 						}
 						if (MainStorage.sizeOfTypeSensor("AH") > 0)
 						{
 							double sumOfHumidity = MainStorage.sumOfTypeSensor("AH");
-							cout << "The sum of all humidity readings is: " << sumOfHumidity << "AH" << endl;
-							cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << endl;
+							std::cout << "The sum of all humidity readings is: " << sumOfHumidity << "AH" << std::endl;
+							std::cout << "and the avarage is: " << sumOfHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << std::endl;
 							MainStorage.minMaxOfTypeSensor("AH");
 							double varianceHumidity = MainStorage.varianceFromTypeSensor(sumOfHumidity, "AH");
-							cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfTypeSensor("AH") - 1) << "AH" << endl;
-							cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << endl;
+							std::cout << "The sample varians is " << varianceHumidity / (MainStorage.sizeOfTypeSensor("AH") - 1) << "AH" << std::endl;
+							std::cout << "The population varians is " << varianceHumidity / MainStorage.sizeOfTypeSensor("AH") << "AH" << std::endl;
 						}
 						else
 						{
-							cout << "You dont have any humidity readings" << endl;
+							std::cout << "You dont have any humidity readings" << std::endl;
 						}
 					}
 					else if ((char)toupper(sensorStat) == 'Q')
@@ -253,12 +254,12 @@ int main()
 					}
 					else
 					{
-						cout << "Wrong input" << endl;
+						std::cout << "Wrong input" << std::endl;
 					}
 				}
 				else
 				{
-					cout << "you dont have anything to check" << endl;
+					std::cout << "you dont have anything to check" << std::endl;
 					StatisticsLoopRunning = false;
 				}
 				Utility.ENTER();
@@ -271,7 +272,7 @@ int main()
 			bool VisualisationLoopRunning = true;
 			while (VisualisationLoopRunning == true)
 			{
-
+				//kollar om man har några värden att kolla på
 				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
 					Utility.visualRepMenu();
@@ -289,7 +290,7 @@ int main()
 						}
 						else
 						{
-							cout << "You dont have any temperatur readings" << endl;
+							std::cout << "You dont have any temperatur readings" << std::endl;
 						}
 					}
 					else if ((char)toupper(visualisationRequest) == 'A')
@@ -302,7 +303,7 @@ int main()
 						}
 						else
 						{
-							cout << "You dont have any airquality readings" << endl;
+							std::cout << "You dont have any airquality readings" << std::endl;
 						}
 					}
 					else if ((char)toupper(visualisationRequest) == 'H')
@@ -315,7 +316,7 @@ int main()
 						}
 						else
 						{
-							cout << "You dont have any humidity readings" << endl;
+							std::cout << "You dont have any humidity readings" << std::endl;
 						}
 					}
 					else if ((char)toupper(visualisationRequest) == 'E')
@@ -330,12 +331,12 @@ int main()
 					}
 					else
 					{
-						cout << "Wrong input" << endl;
+						std::cout << "Wrong input" << std::endl;
 					}
 				}
 				else
 				{
-					cout << "you dont have anything to check" << endl;
+					std::cout << "you dont have anything to check" << std::endl;
 					VisualisationLoopRunning = false;
 				}
 				Utility.ENTER();
@@ -349,6 +350,7 @@ int main()
 			bool SearchIsRunning = true;
 			while (SearchIsRunning == true)
 			{
+				//kollar om man har några värden att söka efter
 				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
 					Utility.searchMenu();
@@ -359,8 +361,8 @@ int main()
 						bool SearchNameRunning = true;
 						while (SearchNameRunning == true)
 						{
-							cout << "what name does the sensor have: " << endl;
-							cout << "If you dont remember the name of sensor press [P] to print out list" << endl;
+							std::cout << "what name does the sensor have: " << std::endl;
+							std::cout << "If you dont remember the name of sensor press [P] to print out list" << std::endl;
 							char SearchName;
 							cin >> SearchName;
 							if ((char)toupper(SearchName) == 'P')
@@ -381,9 +383,9 @@ int main()
 						bool SearchTimeRunning = true;
 						while (SearchTimeRunning == true)
 						{
-							cout << "What TimeStamp does the sensor have: " << endl;
-							cout << "This is the template for the search (00:00:00)" << endl;
-							cout << "If you dont remember the Time of the reading press [P] to print out list" << endl;
+							std::cout << "What TimeStamp does the sensor have: " << std::endl;
+							std::cout << "This is the template for the search (00:00:00)" << std::endl;
+							std::cout << "If you dont remember the Time of the reading press [P] to print out list" << std::endl;
 							char SearchTimeStamp;
 							cin >> SearchTimeStamp;
 							if ((char)toupper(SearchTimeStamp) == 'P')
@@ -405,12 +407,12 @@ int main()
 					}
 					else
 					{
-						cout << "Wrong input" << endl;
+						std::cout << "Wrong input" << std::endl;
 					}
 				}
 				else
 				{
-					cout << "You dont have any readings to search for" << endl;
+					std::cout << "You dont have any readings to search for" << std::endl;
 					SearchIsRunning = false;
 				}
 				Utility.ENTER();
@@ -430,7 +432,7 @@ int main()
 				std::cin >> thresholdChoice;
 				if ((char)toupper(thresholdChoice) == 'Y')
 				{
-					cout << "what is the name of the threshold you want to change: " << endl;
+					std::cout << "what is the name of the threshold you want to change: " << std::endl;
 					std::string thresholdName;
 					std::cin >> thresholdName;
 					Controller.editThresHold(thresholdName);
@@ -442,7 +444,7 @@ int main()
 				}
 				else
 				{
-					cout << "Wrong input" << endl;
+					std::cout << "Wrong input" << std::endl;
 				}
 			}
 		}
@@ -458,7 +460,7 @@ int main()
 				std::cin >> showAlarmChoice;
 				if((char)toupper(showAlarmChoice) == 'Y')
 				{
-					Controller.showAlerts();
+					Controller.showAlarms();
 					showAlarmLoopRunning = false;
 				}
 				else if ((char)toupper(showAlarmChoice) == 'N')
@@ -467,7 +469,7 @@ int main()
 				}
 				else
 				{
-					cout << "Wrong input" << endl;
+					std::cout << "Wrong input" << std::endl;
 				}
 			}
 			Utility.ENTER();
@@ -493,7 +495,7 @@ int main()
 				}
 				else
 				{
-					cout << "Wrong input" << endl;
+					std::cout << "Wrong input" << std::endl;
 				}
 			}
 			Utility.ENTER();
@@ -507,7 +509,7 @@ int main()
 		break;
 		default:
 		{
-			cout << "Wrong input choices are between [1]-[9]" << endl;
+			std::cout << "Wrong input choices are between [1]-[9]" << std::endl;
 		}
 		break;
 		}

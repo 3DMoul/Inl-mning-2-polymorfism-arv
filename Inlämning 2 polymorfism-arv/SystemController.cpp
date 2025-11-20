@@ -94,7 +94,7 @@ void SystemController::loadThresholdFromFile()
         thresHoldConfig.close();
     }
 }
-void SystemController::showAlerts() const
+void SystemController::showAlarms() const
 {
     for (auto& currentThresHold : thresholdList)
     {

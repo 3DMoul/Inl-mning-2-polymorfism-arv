@@ -62,9 +62,10 @@ void Storage::GetMeasurementReading(char type)
         std::cout << "Pick your interval values MaxValue: " << std::endl;
         double maxValue = 0;
         std::cin >> maxValue;
+        std::cout << "here" << std::endl;
         SensorType typeSens = static_cast<SensorType>(type);
-        auto newSensor = MakeSensor(typeSens, newSensorName, minValue, maxValue);
         std::cout << " here" << std::endl;
+        auto newSensor = MakeSensor(typeSens, newSensorName, minValue, maxValue);
         SystemController::saveToFile(*newSensor);
         Measurement newMeasurement;
         newMeasurement.GetReading(*newSensor);

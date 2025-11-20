@@ -7,12 +7,12 @@ class Storage
 {
 public:
 	static std::vector <Measurement> getMeasurments();
-	static std::unique_ptr<Sensor> MakeSensor(SensorType type, const std::string& newname, double min, double max);
+	static std::unique_ptr<Sensor> makeSensor(SensorType type, const std::string& newname, double min, double max);
 	static int sizeOfTypeSensor(const std::string& unitOfunitOfMeasurement);
 	static int SizeOfList();
 	bool SearchForName(std::string Name);
 	bool SearchForTimeStamp(std::string Name);
-	static void GetMeasurementReading(char type);
+	static void getMeasurementReading(char type);
 	static void printByTypeSensor(const std::string& unitOfMeasurement, const std::string& type);
 	static void WriteFile(Measurement& NewMeasurementReadings);
 	static void ReadFile();

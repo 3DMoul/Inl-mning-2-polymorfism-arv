@@ -1,10 +1,10 @@
+#include <iostream>
+#include <vector>
+#include "SystemController.h"
 #include "Storage.h"
 #include "Utility.h"
 #include "Sensor.h"
 #include "SensorType.h"
-#include <iostream>
-#include <vector>
-#include "SystemController.h"
 using namespace std;
 int main()
 {
@@ -13,15 +13,14 @@ int main()
 	SystemController Controller;
 	MainStorage.ReadFile();
 	Controller.loadFromFile();
+	Controller.loadThresholdFromFile();
 	bool MainLoopActive = true;
 	while (MainLoopActive == true)
 	{
 		Controller.checkAlarm();
-		int alarmCounts = Controller.getAlarmCount();
-		std::cout << "The amount of alarms active is: " << alarmCounts << std::endl;
-		Utility.PrintMenu();
+		Utility.printMenu(Controller.getAlarmCount());
 		string NumberChoice = "Choice between [1]-[9]";
-		int Choice = Utility.NumberChoice(NumberChoice);
+		int Choice = Utility.numberInputSafeGaurd(NumberChoice);
 		switch (Choice)
 		{
 		case 1:
@@ -30,30 +29,30 @@ int main()
 			bool SimulatorRunning = true;
 			while (SimulatorRunning == true)
 			{
-				Utility.Simulationmenu();
+				Utility.simulationmenu();
 				char typeChoice;
 				cin >> typeChoice;
 				//använder toupper så man kan skriva bådde stor eller liten bokstav
 				if (static_cast<char>(std::toupper(typeChoice)) == 'T')
 				{
-					MainStorage.GetMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
+					MainStorage.getMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
 					SimulatorRunning = false;
 				}
 				else if (static_cast<char>(std::toupper(typeChoice)) == 'A')
 				{
-					MainStorage.GetMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
+					MainStorage.getMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
 					SimulatorRunning = false;
 				}
 				else if (static_cast<char>(std::toupper(typeChoice)) == 'H')
 				{
-					MainStorage.GetMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
+					MainStorage.getMeasurementReading(static_cast<char>(std::toupper(typeChoice)));
 					SimulatorRunning = false;
 				}
 				else if (static_cast<char>(std::toupper(typeChoice)) == 'E')
 				{
-					MainStorage.GetMeasurementReading('T');
-					MainStorage.GetMeasurementReading('A');
-					MainStorage.GetMeasurementReading('H');
+					MainStorage.getMeasurementReading('T');
+					MainStorage.getMeasurementReading('A');
+					MainStorage.getMeasurementReading('H');
 					SimulatorRunning = false;
 				}
 				else if (static_cast<char>(std::toupper(typeChoice)) == 'Q')
@@ -77,7 +76,7 @@ int main()
 				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
 
-					Utility.PrintReadingMenu();
+					Utility.printReadingMenu();
 					char printRequest;
 					cin >> printRequest;
 					//använder toupper så man kan skriva bådde stor eller liten bokstav
@@ -149,7 +148,7 @@ int main()
 			{
 				if (MainStorage.sizeOfTypeSensor("%") > 0 || MainStorage.sizeOfTypeSensor("C") > 0 || MainStorage.sizeOfTypeSensor("AH") > 0)
 				{
-					Utility.StatisticMenu();
+					Utility.statisticMenu();
 					char sensorStat;
 					cin >> sensorStat;
 					if ((char)toupper(sensorStat) == 'T')
@@ -427,11 +426,24 @@ int main()
 			while (editLoopRunning == true)
 			{
 				Utility.editMenu();
-				std::string thresHoldName;
-				std::cin >> thresHoldName;
-				Controller.editThresHold(thresHoldName);
-
-				editLoopRunning = false;
+				char thresholdChoice;
+				std::cin >> thresholdChoice;
+				if ((char)toupper(thresholdChoice) == 'Y')
+				{
+					cout << "what is the name of the threshold you want to change: " << endl;
+					std::string thresholdName;
+					std::cin >> thresholdName;
+					Controller.editThresHold(thresholdName);
+					editLoopRunning = false;
+				}
+				else if ((char)toupper(thresholdChoice) == 'N')
+				{
+					editLoopRunning = false;
+				}
+				else
+				{
+					cout << "Wrong input" << endl;
+				}
 			}
 		}
 		break;
@@ -447,11 +459,11 @@ int main()
 				if((char)toupper(showAlarmChoice) == 'Y')
 				{
 					Controller.showAlerts();
-					showAlarmChoice = false;
+					showAlarmLoopRunning = false;
 				}
 				else if ((char)toupper(showAlarmChoice) == 'N')
 				{
-					showAlarmChoice = false;
+					showAlarmLoopRunning = false;
 				}
 				else
 				{

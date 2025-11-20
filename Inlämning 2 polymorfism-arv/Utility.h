@@ -4,15 +4,15 @@ using namespace std;
 class Utility
 {
 public:
-	static double RandomTempreture(double Min, double Max);
-	static int RandomAirquality(int Max, int Min);
-	static int NumberChoice(const string StringInput);
+	static double randomMaxMinDecimal(double Min, double Max);
+	static int randomMaxMin(int Max, int Min);
+	static int numberInputSafeGaurd(const string StringInput);
 	static string TimeGenerator();
 	void ENTER();
-	void PrintMenu();
-	void Simulationmenu();
-	void PrintReadingMenu();
-	void StatisticMenu();
+	void printMenu(int alarmcount);
+	void simulationmenu();
+	void printReadingMenu();
+	void statisticMenu();
 	void visualRepMenu();
 	void searchMenu();
 	void editMenu();

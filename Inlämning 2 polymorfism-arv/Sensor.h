@@ -8,7 +8,7 @@ class Sensor
 public:
 	Sensor(SensorType type, std::string UnitOfMeasurment, std::string SensorName, double MinSimulation, double MaxSimulation);
 	virtual ~Sensor() = default;
-	double Read() const;
+	virtual double Read() const;
 	std::string name() const;
 	double minValue() const;
 	double maxValue() const;

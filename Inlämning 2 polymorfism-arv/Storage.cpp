@@ -8,7 +8,7 @@
 #include "SystemController.h"
 std::vector <Measurement> Storage::MeasurmentsList;
 // Puts Readings in vector 
-std::unique_ptr<Sensor> Storage::MakeSensor(SensorType type, const std::string& newname, double min, double max)
+std::unique_ptr<Sensor> Storage::makeSensor(SensorType type, const std::string& newname, double min, double max)
 {
     switch (type) 
     {
@@ -30,7 +30,7 @@ static std::unique_ptr<prompt> makePrompt(SensorType& type)
     default: return nullptr;
     }
 }
-void Storage::GetMeasurementReading(char type)
+void Storage::getMeasurementReading(char type)
 {
     SensorType sensorType = static_cast<SensorType>(type);
     auto sensorPrompt = makePrompt(sensorType);
@@ -40,14 +40,19 @@ void Storage::GetMeasurementReading(char type)
         return;
     }
     string strPromt = sensorPrompt->SimulatingSensorprompt();
-    int amountOfSensors = Utility::NumberChoice(strPromt);//amout of sensors
+    int amountOfSensors = Utility::numberInputSafeGaurd(strPromt);//amout of sensors
+    std::cout << "Pick your interval values MinValue: " << std::endl;
+    double minValue = 0;
+    std::cin >> minValue;
+    std::cout << "Pick your interval values MaxValue: " << std::endl;
+    double maxValue = 0;
+    std::cin >> maxValue;
     for (int i = 0; i < amountOfSensors; i++)
     {
         system("CLS");
         std::cout << "What is the name of your sensor: " << std::endl;
         std::string newSensorName;
         std::cin >> newSensorName;
-        SystemController::addThresholdForSensor(newSensorName);
         for (auto& currentName : MeasurmentsList)
         {
             while (currentName.SensorName == newSensorName)
@@ -56,16 +61,8 @@ void Storage::GetMeasurementReading(char type)
                 std::cin >> newSensorName;
             }
         }
-        std::cout << "Pick your interval values MinValue: " << std::endl;
-        double minValue = 0;
-        std::cin >> minValue;
-        std::cout << "Pick your interval values MaxValue: " << std::endl;
-        double maxValue = 0;
-        std::cin >> maxValue;
-        std::cout << "here" << std::endl;
-        SensorType typeSens = static_cast<SensorType>(type);
-        std::cout << " here" << std::endl;
-        auto newSensor = MakeSensor(typeSens, newSensorName, minValue, maxValue);
+        SystemController::addThresholdForSensor(newSensorName);
+        auto newSensor = makeSensor(sensorType, newSensorName, minValue, maxValue);
         SystemController::saveToFile(*newSensor);
         Measurement newMeasurement;
         newMeasurement.GetReading(*newSensor);
@@ -267,8 +264,27 @@ void Storage::minMaxOfTypeSensor(const std::string& unitOfMeasurement)
 {
     Measurement MaxReading;
     Measurement MinReading;
-    double MaxTemp = MeasurmentsList[0].SensorMeasurement;
-    double MinTemp = MeasurmentsList[0].SensorMeasurement;
+    double MaxTemp;
+    double MinTemp;
+
+    for (auto& i : MeasurmentsList)
+    {
+        if(i.UnitOfMeasurment == unitOfMeasurement)
+        {
+            MaxTemp = i.SensorMeasurement;
+            MaxReading.SensorMeasurement = i.SensorMeasurement;
+            MaxReading.TimeStamp = i.TimeStamp;
+            MaxReading.SensorName = i.SensorName;
+            MaxReading.UnitOfMeasurment = i.UnitOfMeasurment;
+            MinTemp = i.SensorMeasurement;
+            MinReading.SensorMeasurement = i.SensorMeasurement;
+            MinReading.TimeStamp = i.TimeStamp;
+            MinReading.SensorName = i.SensorName;
+            MinReading.UnitOfMeasurment = i.UnitOfMeasurment;
+            break;
+        }
+    }
+
     for (auto& CurrentSensor : MeasurmentsList)
     {
         if (CurrentSensor.UnitOfMeasurment == unitOfMeasurement)

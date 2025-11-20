@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <memory>
 #include <string>
 #include "Sensor.h"
 #include "ThresHold.h"
@@ -13,6 +12,8 @@ public:
 	void checkAlarm();
 	int getAlarmCount() const;
 	static void addThresholdForSensor(const std::string& name);
+	static void saveThresholdToFile(Threshold newThresHold);
+	static void loadThresholdFromFile();
 	void showAlerts() const;
 	void showSensorConfig();
 	void showStatsFor(std::string sensorName) const;

@@ -4,10 +4,10 @@
 #include <string>
 
 Sensor::Sensor(SensorType type, std::string UnitOfMeasurment, std::string SensorName, double MinSimulation, double MaxSimulation)
-	: type(type), SensorName(SensorName), MinSimulation(MinSimulation), MaxSimulation(MaxSimulation) {};
+	: type(type), SensorName(SensorName), UnitOfMeasurment(UnitOfMeasurment), MinSimulation(MinSimulation), MaxSimulation(MaxSimulation) {};
 double Sensor::Read() const
 {
-	return Utility::RandomTempreture(MinSimulation, MaxSimulation);
+	return Utility::randomMaxMinDecimal(MinSimulation, MaxSimulation);
 }
 string Sensor::name() const
 {

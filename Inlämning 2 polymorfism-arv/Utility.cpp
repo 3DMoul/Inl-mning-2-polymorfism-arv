@@ -6,17 +6,17 @@
 #include "SystemController.h"
 using namespace std;
 //enum class SensorScript {};
-double Utility::RandomTempreture(double Min, double Max)
+double Utility::randomMaxMinDecimal(double Min, double Max)
 {
     double f = (double)rand() / RAND_MAX;
     double RandomTempreture = Min + f * (Max - Min);
     return RandomTempreture;
 }
-int Utility::RandomAirquality(int Max, int Min)
+int Utility::randomMaxMin(int Max, int Min)
 {
     return rand() % (Min - Max) + Max;
 }
-int Utility::NumberChoice(string StringInput)
+int Utility::numberInputSafeGaurd(string StringInput)
 {
     std::cout << StringInput << std::endl;
     int Choice;
@@ -50,9 +50,10 @@ void Utility::ENTER()
     streamsize InputBufferLimit = 10000;
     cin.ignore(InputBufferLimit, '\n');
 }
-void Utility::PrintMenu()
+void Utility::printMenu(int alarmcount)
 {
     system("CLS");
+    std::cout << "The amount of alarms active is: " << alarmcount << std::endl;
     cout << "---------------------------------" << endl;
     cout << "[1] Adding sensor readings" << endl;
     cout << "[2] Read out readings" << endl;
@@ -65,13 +66,13 @@ void Utility::PrintMenu()
     cout << "[9] Exit program" << endl;
     cout << "---------------------------------" << endl;
 }
-void Utility::Simulationmenu()
+void Utility::simulationmenu()
 {
     cout << "Do you want to simulate sensor readings" << endl;
     cout << "[T] emperature / [A]irquality / [H]umidity / [E]very sensor type" << endl;
     cout << "If you dont want to simulate anything press [Q]" << endl;
 }
-void Utility::PrintReadingMenu()
+void Utility::printReadingMenu()
 {
     cout << "You have [" << Storage::sizeOfTypeSensor("%") << "]" << " Airquality readings" << endl;
     cout << "You have [" << Storage::sizeOfTypeSensor("C") << "]" << " Temperature readings" << endl;
@@ -80,7 +81,7 @@ void Utility::PrintReadingMenu()
     cout << "[T] emperature / [A]irquality / [H]umidity / [E]very sensor type" << endl;
     cout << "If you dont want to print anything press [Q]" << endl;
 }
-void Utility::StatisticMenu()
+void Utility::statisticMenu()
 {
     cout << "You have [" << Storage::sizeOfTypeSensor("%") << "] Airquality readings" << endl;
     cout << "You have [" << Storage::sizeOfTypeSensor("C") << "] Temperature readings" << endl;
@@ -103,20 +104,18 @@ void Utility::searchMenu()
 }
 void Utility::editMenu()
 {
-    std::cout << "what threshold do you want to edit type the name: " << std::endl;
-    cout << "If you dont want to simulate anything press [Q]" << endl;
+    cout << "Do you want to edit threshold: " << endl;
+    cout << "[Y]es / [N]o" << endl;
 }
 void Utility::showAlarmMenu()
 {
     cout << "Do you want to see all the alarms" << endl;
     cout << "[Y]es / [N]o" << endl;
-    cout << "If you dont want to see alarms press [Q]" << endl;
 }
 void Utility::sensorConfigsMenu()
 {
     cout << "Do you want to see all the sensor configs" << endl;
     cout << "[Y]es / [N]o" << endl;
-    cout << "If you dont want to see alarms press [Q]" << endl;
 }
 string temperaturePrompts::SimulatingSensorprompt()const
 {

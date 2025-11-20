@@ -4,7 +4,6 @@
 #include "Storage.h"
 #include "Utility.h"
 #include "Sensor.h"
-#include "SensorType.h"
 int main()
 {
 	Utility Utility;
